@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.zxh.mapper.TaskMapper">
+
+    <select id="queryAll" resultType="Task">
+        select * from task
+    </select>
+
+    <select id="queryById" resultType="Task">
+        select * from task where taskId = #{taskId}
+    </select>
+
+    <select id="queryByTaskUser" resultType="Task">
+        select * from task where taskUser = #{taskUser}
+    </select>
+
+    <select id="queryByPublisher" resultType="Task">
+        select * from task where publisher = #{publisher}
+    </select>
+
+    <insert id="add" parameterType="Task">
+        insert into task (taskUser,taskContent,taskStatus,publisher,startTime,endTime,createTime)
+        values (#{taskUser},#{taskContent},#{taskStatus},#{publisher},#{startTime},#{endTime},#{createTime})
+    </insert>
+
+    <update id="update" parameterType="Task">
+        update task set taskUser=#{taskUser},taskContent=#{taskContent},taskStatus=#{taskStatus},
+        publisher=#{publisher},startTime=#{startTime},endTime=#{endTime},createTime=#{createTime}
+        where taskId=#{taskId}
+    </update>
+
+    <delete id="delete" parameterType="int">
+        delete from task where taskId = #{taskId}
+    </delete>
+
+</mapper>

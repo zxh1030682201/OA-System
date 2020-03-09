@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.zxh.mapper.UserMapper">
+
+    <select id="queryAll" resultType="User">
+        select * from user
+    </select>
+
+    <select id="queryById" resultType="User">
+        select * from user where userId = #{userId}
+    </select>
+
+    <select id="queryByName" resultType="User">
+        select * from user,department where user.name LIKE '%${name}%' and department.deptId=user.deptId
+    </select>
+
+    <select id="queryByUN" resultType="User">
+        select * from user where username=#{username}
+    </select>
+
+    <select id="queryByUsername" resultType="User">
+        select * from user where username = #{username}
+    </select>
+
+    <select id="queryByDept" resultType="User">
+        select * from user where deptId = #{deptId}
+    </select>
+
+    <insert id="add" parameterType="User">
+        insert into user (name,username,password,gender,tel,email,deptId,userStatus)
+        values (#{name},#{username},#{password},#{gender},#{tel},#{email},#{deptId},#{userStatus})
+    </insert>
+
+    <update id="update" parameterType="User">
+        update user set name=#{name},username=#{username},password=#{password},
+        gender=#{gender},tel=#{tel},email=#{email},deptId=#{deptId},userStatus=#{userStatus}
+        where userId=#{userId}
+    </update>
+
+    <delete id="delete" parameterType="int">
+        delete from user where userId = #{userId}
+    </delete>
+
+</mapper>

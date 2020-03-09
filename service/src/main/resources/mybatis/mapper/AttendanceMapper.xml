@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.zxh.mapper.AttendanceMapper">
+
+    <select id="queryAll" resultType="Attendance">
+        select * from attendance
+    </select>
+
+    <select id="queryById" resultType="Attendance">
+        select * from attendance where atdId = #{atdId}
+    </select>
+
+    <select id="queryByUser" resultType="Attendance">
+        select * from attendance where atdUser = #{atdUser}
+    </select>
+
+    <insert id="add" parameterType="Attendance">
+        insert into attendance (atdUser,checkInTime,checkOutTime)
+        values (#{atdUser},#{checkInTime},#{checkOutTime})
+    </insert>
+
+    <update id="update" parameterType="Attendance">
+        update attendance set atdUser=#{atdUser},checkInTime=#{checkInTime},checkOutTime=#{checkOutTime}
+        where atdId=#{atdId}
+    </update>
+
+    <delete id="delete" parameterType="int">
+        delete from attendance where atdId = #{atdId}
+    </delete>
+
+</mapper>

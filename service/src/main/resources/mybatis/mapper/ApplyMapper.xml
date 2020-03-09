@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.zxh.mapper.ApplyMapper">
+    <select id="queryAll" resultType="Apply">
+        select * from apply
+    </select>
+
+    <select id="queryById" resultType="Apply">
+        select * from apply where applyId = #{applyId}
+    </select>
+
+    <select id="queryByFrom" resultType="Apply">
+        select * from apply where applyUser = #{applyUser}
+    </select>
+
+    <select id="queryByTo" resultType="Apply">
+        select * from apply where approvalUser = #{approvalUser}
+    </select>
+
+    <insert id="add" parameterType="Apply">
+        insert into apply (applyUser,approvalUser,applyType,startTime,endTime,applyReason,applyStatus)
+        values (#{applyUser},#{approvalUser},#{applyType},#{startTime},#{endTime},#{applyReason},#{applyStatus})
+    </insert>
+
+    <update id="update" parameterType="Apply">
+        update apply set applyUser=#{applyUser},approvalUser=#{approvalUser},applyType=#{applyType},
+        startTime=#{startTime},endTime=#{endTime},applyReason=#{applyReason},applyStatus=#{applyStatus}
+        where applyId=#{applyId}
+    </update>
+
+    <delete id="delete" parameterType="int">
+        delete from apply where applyId = #{applyId}
+    </delete>
+</mapper>

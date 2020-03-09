@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.zxh.mapper.AnnouncementMapper">
+    <select id="queryAll" resultType="Announcement">
+        select * from announcement
+    </select>
+
+    <select id="queryById" resultType="Announcement">
+        select * from announcement where annoId = #{annoId}
+    </select>
+
+    <insert id="add" parameterType="Announcement">
+        insert into announcement (annoTime,annoContent)
+        values (#{annoTime},#{annoContent})
+    </insert>
+
+    <update id="update" parameterType="Announcement">
+        update announcement set annoContent = #{annoContent},annoTime = #{annoTime}
+        where annoId = #{annoId}
+    </update>
+
+    <delete id="delete" parameterType="int">
+        delete from announcement where annoId = #{annoId}
+    </delete>
+</mapper>

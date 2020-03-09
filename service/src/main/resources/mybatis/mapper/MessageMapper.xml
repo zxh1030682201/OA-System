@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.zxh.mapper.MessageMapper">
+
+    <select id="queryAll" resultType="Message">
+        select * from message
+    </select>
+
+    <select id="queryById" resultType="Message">
+        select * from message where msgId = #{msgId}
+    </select>
+
+    <select id="queryByS" resultType="Message">
+        select message.*,user.name as senderName from message,user
+        where message.sender = #{sender} and message.sender = user.userId
+    </select>
+
+    <select id="queryByRR" resultType="Message">
+        select message.*,user.name as senderName from message,user
+        where message.receiver = #{receiver} and message.readed = 1 and message.sender = user.userId
+    </select>
+
+    <select id="queryByRU" resultType="Message">
+        select message.*,user.name as senderName from message,user
+        where message.receiver = #{receiver} and message.readed = 0 and message.sender = user.userId
+    </select>
+
+    <insert id="add" parameterType="Message">
+        insert into message (sender,receiver,sendTime,msgTheme,msgContent,readed)
+        values (#{sender},#{receiver},#{sendTime},#{msgTheme},#{msgContent},#{readed})
+    </insert>
+
+    <update id="update" parameterType="Message">
+        update message set sender=#{sender},receiver=#{receiver},sendTime=#{sendTime},
+        msgTheme=#{msgTheme},msgContent=#{msgContent},readed=#{readed}
+        where msgId=#{msgId}
+    </update>
+
+    <delete id="delete" parameterType="int">
+        delete from message where msgId = #{msgId}
+    </delete>
+
+</mapper>
