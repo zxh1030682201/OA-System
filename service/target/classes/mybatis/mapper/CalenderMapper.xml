@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.zxh.mapper.CalenderMapper">
+
+    <select id="queryAll" resultType="Calender">
+        select * from calender
+    </select>
+
+    <select id="queryById" resultType="Calender">
+        select * from calender where cldId = #{cldId}
+    </select>
+
+    <select id="queryByUD" resultType="Calender">
+        select * from calender where cldUser=#{user} and cldDate=#{date}
+    </select>
+
+    <select id="queryByUser" resultType="Calender">
+        select * from calender where cldUser = #{cldUser}
+    </select>
+
+    <insert id="add" parameterType="Calender">
+        insert into calender (cldUser,cldDate,cldContent,createTime)
+        values (#{cldUser},#{cldDate},#{cldContent},#{createTime})
+    </insert>
+
+    <update id="update" parameterType="Calender">
+        update calender set cldUser=#{cldUser},cldDate=#{cldDate},cldContent=#{cldContent},
+        createTime=#{createTime}
+        where cldId=#{cldId}
+    </update>
+
+    <delete id="delete" parameterType="int">
+        delete from calender where cldId = #{cldId}
+    </delete>
+
+</mapper>

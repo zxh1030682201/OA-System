@@ -10,9 +10,11 @@ import lombok.NoArgsConstructor;
 public class Task {
     private int taskId;
     private int taskUser;
+    private String taskUserName;
     private String taskContent;
     private int taskStatus;
     private int publisher;
+    private String publisherName;
     private String startTime;
     private String endTime;
     private String createTime;

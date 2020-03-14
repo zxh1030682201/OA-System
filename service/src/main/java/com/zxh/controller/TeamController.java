@@ -54,7 +54,7 @@ public class TeamController {
         Integer teamLeader=(int)map.get("teamLeader");
         String teamMembers=map.get("teamMembers").toString();
 
-        Team team=new Team(0,teamName,teamLeader,teamMembers);
+        Team team=new Team(0,teamName,teamLeader,null,teamMembers);
 
         System.out.println("重新生成的   "+team);
         return team;

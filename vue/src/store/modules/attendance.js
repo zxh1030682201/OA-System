@@ -15,6 +15,9 @@ const actions = {
   async atd_queryByUser({commit},options){
     return (await services.atd_queryByUser(options)).data
   },
+  async atd_queryByUD({commit},options){
+    return (await services.atd_queryByUD(options)).data
+  },
   async atd_add({commit},options){
     return (await services.atd_add(options))
   },

@@ -62,7 +62,7 @@ public class TaskController {
         String startTime=map.get("startTime").toString();
         String endTime=map.get("endTime").toString();
         String createTime=map.get("createTime").toString();
-        Task task=new Task(0,taskUser,taskContent,taskStatus,publisher,startTime,endTime,createTime);
+        Task task=new Task(0,taskUser,null,taskContent,taskStatus,publisher,null,startTime,endTime,createTime);
 
         System.out.println("重新生成的  "+task);
         return task;

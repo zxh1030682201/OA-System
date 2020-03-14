@@ -10,13 +10,13 @@
 					<el-button type="primary" v-on:click="getUsersByPage()">查询</el-button>
 				</el-form-item>
 				<el-form-item>
-					<el-button type="primary" @click="handleAdd">新增</el-button>
+					<el-button type="primary" @click="handleAdd()">新增</el-button>
 				</el-form-item>
 			</el-form>
 		</el-col>
 
 		<!--列表-->
-		<el-table :data="users" highlight-current-row v-loading="listLoading" @selection-change="selsChange" style="width: 100%;">
+		<el-table :data="users" highlight-current-row @selection-change="selsChange()" style="width: 100%;">
 			<el-table-column type="selection">
 			</el-table-column>
 			<el-table-column type="index" width="100">
@@ -47,7 +47,7 @@
 
 		<!--工具条-->
 		<el-col :span="24" class="toolbar">
-			<el-button type="danger" @click="batchRemove" :disabled="this.sels.length===0">批量删除</el-button>
+			<el-button type="danger" @click="batchRemove()" :disabled="this.sels.length===0">批量删除</el-button>
 			<el-pagination layout="prev, pager, next" @current-change="handleCurrentChange" :page-size="10" :total="total" style="float:right;">
 			</el-pagination>
 		</el-col>
@@ -98,7 +98,7 @@
 			</el-form>
 			<div slot="footer" class="dialog-footer">
 				<el-button @click.native="editFormVisible = false">取消</el-button>
-				<el-button type="primary" @click.native="editSubmit" :loading="editLoading">提交</el-button>
+				<el-button type="primary" @click.native="editSubmit()" >提交</el-button>
 			</div>
 		</el-dialog>
 
@@ -148,7 +148,7 @@
 			</el-form>
 			<div slot="footer" class="dialog-footer">
 				<el-button @click.native="addFormVisible = false">取消</el-button>
-				<el-button type="primary" @click.native="addSubmit" :loading="addLoading">提交</el-button>
+				<el-button type="primary" @click.native="addSubmit()" >提交</el-button>
 			</div>
 		</el-dialog>
 	</section>
@@ -163,16 +163,17 @@
 				filters: {
 					name: ''
 				},
+				isAdmin:false,
 				users: [],
 				depts:[],
 				total: 0,
 				page: 1,
-				listLoading: false,
+
 				sels: [],//列表选中列
 				editFormVisible: false,//编辑界面是否显示
-				editLoading: false,
+
 				addFormVisible: false,//新增界面是否显示
-				addLoading: false,
+
 
 				FormRules: {
 					name: [{ required: true, message: '请输入姓名', trigger: 'blur' }],
@@ -210,6 +211,30 @@
 			}
 		},
 		methods: {
+			//检查当前登录者是否是管理员
+			checkAdmin(){
+				if(this.isAdmin == false){
+					this.$message({
+						message: '权限不足,请联系管理员',
+						type: 'error'
+					});
+					this.$router.push({ path: '/message' });
+				}
+			},
+			//检查当前登录者是否是管理员
+			getAllAdmins(){
+				this.$store.dispatch('admin_queryAll').then(res=>{
+					for(let admin of res){
+						if(admin.userId == JSON.parse(sessionStorage.getItem('user')).userId){
+							this.isAdmin = true
+							break
+						}
+					}
+					this.checkAdmin()
+				})
+			},
+
+			// 多选切换
 			selsChange: function (sels) {
 				this.sels = sels;
 			},
@@ -237,19 +262,24 @@
 					}
 			},
 
-			//更改页码
+			//更改页码操作
 			handleCurrentChange(val) {
 				this.page = val;
 				this.getUsersByPage();
 			},
 
+			//查询所有的部门
+			getAllDepts(){
+				this.$store.dispatch('dept_queryAll').then(res=>{
+					this.depts=res
+				})
+			},
 			//获取用户
 			getUsersByPage() {
 				let para = {
 					page: this.page,
 					name: this.filters.name
 				};
-				this.listLoading = true;
 				//获取总数
 				this.$store.dispatch('user_queryByName',para).then(res=>{
 					this.total=res.length
@@ -257,30 +287,49 @@
 				//获取单页
 				this.$store.dispatch('user_queryPage',para).then(res=>{
 					this.users = res
-					this.listLoading = false;
 				})
 			},
 
-			//显示编辑界面
+			//编辑操作
 			handleEdit(index, row) {
 				this.editFormVisible = true;
 				this.editForm = Object.assign({}, row);
 			},
-
-			//显示新增界面
+			//新增操作
 			handleAdd() {
 				this.addFormVisible = true;
 			},
+			//删除操作
+			handleDel(index, row) {
+				this.$confirm('确认删除该记录吗?', '提示', {
+					type: 'warning'
+				}).then(() => {
+					this.$store.dispatch('user_delete',row.userId).then(res =>{
+						if(res.data == '删除用户成功'){
+							this.$message({
+								message: res.data,
+								type: 'success'
+							});
+							this.getUsersByPage()
+						}else{
+							this.$message({
+									message: res.data,
+									type: 'error'
+							});
+						}
+					})
+				})
+			},
 
-			//编辑
+
+
+			//确认编辑
 			editSubmit() {
 				this.$refs.editForm.validate((valid) => {
 					if (valid) {
 						this.$confirm('确认提交吗？', '提示', {}).then(() => {
-							this.editLoading = true;
 							let para = Object.assign({}, this.editForm);
 							this.$store.dispatch('user_update',para).then(res=>{
-								this.editLoading = false;
 								if(res.data == "修改用户成功"){
 									this.$message({
 										message: res.data,
@@ -295,22 +344,22 @@
 										type: 'error'
 									});
 								}
-
 							})
 						});
 					}
 				});
 			},
 
-			//新增
+
+			//确认新增
 			addSubmit() {
 				this.$refs.addForm.validate((valid) => {
 					if (valid) {
 						this.$confirm('确认提交吗？', '提示', {}).then(() => {
-							this.addLoading = true;
+
 							let para = Object.assign({}, this.addForm);
 							this.$store.dispatch('user_add',para).then(res=>{
-								this.addLoading = false;
+
 								if(res.data == "添加用户成功"){
 									this.$message({
 										message: res.data,
@@ -331,40 +380,13 @@
 				});
 			},
 
-			//删除
-			handleDel(index, row) {
-				this.$confirm('确认删除该记录吗?', '提示', {
-					type: 'warning'
-				}).then(() => {
-					this.listLoading = true;
-					this.$store.dispatch('user_delete',row.userId).then(res =>{
-						this.listLoading = false
-						console.log(res.data)
-						if(res.data == '删除用户成功'){
-							this.$message({
-								message: res.data,
-								type: 'success'
-							});
-							this.getUsersByPage()
-						}else{
-							this.$message({
-									message: res.data,
-									type: 'error'
-							});
-						}
-						
-					})
-
-				})
-			},
-
 			//批量删除
 			batchRemove() {
 				let ids = this.sels.map(item => item.userId)
 				this.$confirm('确认删除选中记录吗？', '提示', {
 					type: 'warning'
 				}).then(() => {
-					this.listLoading = true;
+
 					for(let i = 0;i<ids.length;i++){
 						this.$store.dispatch('user_delete',ids[i]).then(res=>{
 							this.getUsersByPage()
@@ -374,25 +396,14 @@
 						message: '删除成功',
 						type: 'success'
 					});
-					this.listLoading = false
+
 				})
 			},
 
-			//查询所有的部门
-			getAllDepts(){
-				this.$store.dispatch('dept_queryAll').then(res=>{
-					this.depts=res
-				})
-			},
+		},
 
-			test(){
-				console.log(util.formatDate.format(new Date(),'yyyy-MM-dd hh:mm:ss'))
-			}
-		},
-		mounted() {
-		},
 		created() {
-			this.test()
+			this.getAllAdmins()
 			this.getUsersByPage()
 			this.getAllDepts()
 		}

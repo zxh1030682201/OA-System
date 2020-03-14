@@ -3,38 +3,51 @@
     <br>
     <el-tabs v-model="message" type="border-card">
 
-      <el-tab-pane label="日历" name="first">
-          <el-calendar v-model="value" @click.native="handleClick">
-          </el-calendar>
+      <el-tab-pane label="日程" name="first">
+        <el-container style="height:550px">
+          <el-main>
+            <el-calendar v-model="value" @dblclick.native="handleClick()">
+              <template
+                  slot="dateCell"
+                  slot-scope="{date, data}">
+                  <span> {{ data.day.split('-').slice(1).join('-') }} </span>
+                  <br><br>
+                  <span style="color:#cc3300"> {{dealMyDate(data.day)}} </span>
+                </template>
+            </el-calendar>
+          </el-main>
+        </el-container>
       </el-tab-pane>
 
-      <el-tab-pane label="日历列表" name="second">
-        <div>
-          <!-- 列表 -->
-          <el-table :data="userClds" highlight-current-row @selection-change="selsChange" style="width: 100%;" height="550">
-            <el-table-column type="selection">
-            </el-table-column>
-            <el-table-column type="index" width="100">
-            </el-table-column>
-            <el-table-column prop="cldDate" label="记录日期" width="120" >
-            </el-table-column>
-            <el-table-column prop="cldContent" label="内容" :show-overflow-tooltip="true" >
-            </el-table-column>
-            <el-table-column prop="createTime" label="创建时间" width="100"  >
-            </el-table-column>
+      <el-tab-pane label="日程列表" name="second">
+        <el-container c>
+          <el-main>
+            <!-- 列表 -->
+            <el-table :data="userClds" highlight-current-row @selection-change="selsChange" style="width: 100%;" height="550">
+              <el-table-column type="selection">
+              </el-table-column>
+              <el-table-column type="index" width="100">
+              </el-table-column>
+              <el-table-column prop="cldDate" label="记录日期" width="120" >
+              </el-table-column>
+              <el-table-column prop="cldContent" label="内容" :show-overflow-tooltip="true" >
+              </el-table-column>
+              <el-table-column prop="createTime" label="创建时间" width="100"  >
+              </el-table-column>
 
-            <el-table-column label="操作" width="150">
-              <template slot-scope="scope">
-                <el-button size="small" @click="handleEdit(scope.$index, scope.row)">编辑</el-button>
-                <el-button type="danger" size="small" @click="handleDel(scope.$index, scope.row)">删除</el-button>
-              </template>
-            </el-table-column>
-          </el-table>
-          <!--工具条-->
-          <el-col :span="24" class="toolbar">
-            <el-button type="danger" @click="batchRemove" :disabled="this.sels.length===0">批量删除</el-button>
-          </el-col>
-        </div>
+              <el-table-column label="操作" width="150">
+                <template slot-scope="scope">
+                  <el-button size="small" @click="handleEdit(scope.$index, scope.row)">编辑</el-button>
+                  <el-button type="danger" size="small" @click="handleDel(scope.$index, scope.row)">删除</el-button>
+                </template>
+              </el-table-column>
+            </el-table>
+            <!--工具条-->
+            <el-col :span="24" class="toolbar">
+              <el-button type="danger" @click="batchRemove" :disabled="this.sels.length===0">批量删除</el-button>
+            </el-col>
+          </el-main>
+        </el-container>
       </el-tab-pane>
     </el-tabs>
 
@@ -43,13 +56,13 @@
         <el-form :model="newCld" label-width="80px" ref="cld">
 
           <el-form-item label="日程安排" prop="cldContent" >
-            <el-input v-model="newCld.cldContent" ></el-input>
+            <el-input v-model="newCld.cldContent" maxlength="20" placeholder="请输入备忘录（不超过20个字符）" show-word-limit></el-input>
           </el-form-item>
 
         </el-form>
         <div slot="footer" class="dialog-footer">
-          <el-button @click.native="newCldVisible = false">取消</el-button>
-          <el-button type="primary" @click.native="handleNewCld()">添加</el-button>
+          <el-button @click.native="handleCancel()">取消</el-button>
+          <el-button type="primary" @click.native="addSubmit()">添加</el-button>
         </div>
       </el-dialog>
 
@@ -58,7 +71,7 @@
         <el-form :model="editCld" label-width="80px" ref="cld">
 
           <el-form-item label="日程安排" prop="cldContent" >
-            <el-input v-model="editCld.cldContent" ></el-input>
+            <el-input v-model="editCld.cldContent" maxlength="20" show-word-limit></el-input>
           </el-form-item>
 
           <el-form-item label="创建时间" prop="createTime" >
@@ -67,8 +80,8 @@
         </el-form>
         <div slot="footer" class="dialog-footer">
           <el-button @click.native="editCldVisible = false">取消</el-button>
-          <el-button type="primary" @click.native="handleEditCld()">更新</el-button>
-          <el-button type="danger" @click.native="handleDelCld()">删除</el-button>
+          <el-button type="primary" @click.native="editSubmit()">更新</el-button>
+          <el-button type="danger" @click.native="delSubmit()">删除</el-button>
         </div>
       </el-dialog>
 
@@ -108,9 +121,6 @@
       this.getLoginUser()
       this.getUserClds()
     },
-    computed: {
-
-    },
     methods: {
       selsChange: function (sels) {
 				this.sels = sels;
@@ -126,6 +136,9 @@
           this.userClds=res
         })
       },
+
+
+
       // 点击日历事件
       handleClick(){
         let para={
@@ -143,9 +156,25 @@
           }
         })
       },
+      handleCancel(){
+        this.newCldVisible = false 
+        this.newCld.cldContent = ''
+      },
+      // 列表页面删除
+      handleDel(index,row){
+        this.editCld.cldId=row.cldId
+        this.delSubmit()
+      },
+      // 列表页面编辑
+      handleEdit(index,row){
+        this.editCldVisible = true
+        this.editCld = row
+      },
+
+
 
       // 新建日历记录
-      handleNewCld(){
+      addSubmit(){
         let para={
           cldUser:this.loginUser.userId,
           cldDate:util.formatDate.format(this.value,'yyyy-MM-dd'),
@@ -169,44 +198,34 @@
 						}
         })
       },
-
-
-      // 列表页面删除
-      handleDel(index,row){
-        this.editCld.cldId=row.cldId
-        this.handleDelCld()
+      // 日历页面编辑
+      editSubmit(){
+        this.$confirm('确认删除该记录吗?', '提示', {
+          type: 'warning'
+        }).then(() => {
+          this.$store.dispatch('cld_update',this.editCld).then(res=>{
+            if(res.data == 'OK'){
+                this.$message({
+                  message: "修改成功",
+                  type: 'success'
+                });
+                this.editCldVisible = false
+                this.getUserClds()
+              }else{
+                this.$message({
+                    message: res.data,
+                    type: 'error'
+                });
+              }
+          })
+        })
       },
-
       // 日历页面删除
-      handleDelCld(){
+      delSubmit(){
         this.$store.dispatch('cld_delete',this.editCld.cldId).then(res=>{
           if(res.data == 'OK'){
 							this.$message({
 								message: "删除成功",
-								type: 'success'
-              });
-              this.editCldVisible = false
-              this.getUserClds()
-						}else{
-							this.$message({
-									message: res.data,
-									type: 'error'
-							});
-						}
-        })
-      },
-
-      // 列表页面编辑
-      handleEdit(index,row){
-        this.editCldVisible = true
-        this.editCld = row
-      },
-      // 日历页面编辑
-      handleEditCld(){
-        this.$store.dispatch('cld_update',this.editCld).then(res=>{
-          if(res.data == 'OK'){
-							this.$message({
-								message: "修改成功",
 								type: 'success'
               });
               this.editCldVisible = false
@@ -235,8 +254,20 @@
 						type: 'success'
 					});
 				})
-			},
-
+      },
+      
+      // 处理日历现实内容
+      dealMyDate(day) {
+            let len = this.userClds.length
+            let res = ""
+            for(let i=0; i<len; i++){
+                if(this.userClds[i].cldDate == day) {
+                    res = this.userClds[i].cldContent
+                    break
+                }
+            }
+            return res
+        }
 
     }
   }

@@ -10,10 +10,13 @@ import lombok.NoArgsConstructor;
 public class Apply {
     private int applyId;
     private int applyUser;
+    private String applyUserName;
     private int approvalUser;
+    private String approvalUserName;
     private int applyType;
     private String startTime;
     private String endTime;
     private String applyReason;
+    private String approvalReason;
     private int applyStatus;
 }

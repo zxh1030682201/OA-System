@@ -58,7 +58,7 @@
               }else{
                 sessionStorage.setItem('user', JSON.stringify(data));
                 sessionStorage.setItem('isRememberPW',this.isRememberPW);
-                this.$router.push({ path: '/myInfo' });
+                this.$router.push({ path: '/message' });
               }
             })
           } else {
@@ -66,14 +66,16 @@
             return false;
           }
         });
-      }
+      },
     },
     created(){
       if(sessionStorage.getItem('isRememberPW') == 'true'){
         this.isRememberPW = true
       }
-      this.ruleForm2.account=JSON.parse(sessionStorage.getItem('user')).username
-      this.ruleForm2.checkPass=JSON.parse(sessionStorage.getItem('user')).password
+      if(sessionStorage.getItem('user') !== null){
+        this.ruleForm2.account=JSON.parse(sessionStorage.getItem('user')).username
+        this.ruleForm2.checkPass=JSON.parse(sessionStorage.getItem('user')).password
+      }
     }
   }
 

@@ -19,6 +19,8 @@ public interface AttendanceMapper {
     //根据用户查询所有记录
     List<Attendance> queryByUser(Integer atdUser);
 
+    List<Attendance> queryByUD(Integer atdUser,String date);
+
     Integer add(Attendance attendance);
 
     Integer update(Attendance attendance);

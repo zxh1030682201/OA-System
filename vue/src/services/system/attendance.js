@@ -1,11 +1,13 @@
 import axios from '../util/axios.js'
-const baseurl='http://localhost:7000/atd/'
+const baseurl='http://192.168.1.6:7000/atd/'
 
 export const queryAll = (options) => axios.setAxiosGetPromise(baseurl+'queryAll')
 
 export const queryById = (id) => axios.setAxiosGetPromise(baseurl+'queryById/'+id)
 
-export const queryByUser = (userId) => axios.setAxiosGetPromise(baseurl+'queryById/'+userId)
+export const queryByUser = (userId) => axios.setAxiosGetPromise(baseurl+'queryByUser/'+userId)
+
+export const queryByUD = (options) => axios.setAxiosGetPromise(baseurl+'queryByUD',options)
 
 export const add = (options)=>axios.setAxiosPostPromise(baseurl+'add',options)
 

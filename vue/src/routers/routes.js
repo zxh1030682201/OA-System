@@ -1,5 +1,6 @@
 import Login from '../views/basic/Login.vue'
 import NotFound from '../views/basic/404.vue'
+import NoAccess from '../views/basic/403'
 import Home from '../views/basic/Home.vue'
 
 import Message from '../views/person/Message.vue'
@@ -10,6 +11,7 @@ import Apply from '../views/smartOA/Apply'
 import Attendance from '../views/smartOA/Attendance'
 import Task from '../views/smartOA/Task'
 
+import Admin from '../views/admin/Admins'
 import Announcement from '../views/admin/Announcement'
 import User from '../views/admin/User.vue'
 import Department from '../views/admin/Department'
@@ -24,6 +26,11 @@ let routes = [{
     },{
         path: '/404',
         component: NotFound,
+        name: '',
+        hidden: true
+    },{
+        path: '/403',
+        component: NoAccess,
         name: '',
         hidden: true
     },{
@@ -46,7 +53,7 @@ let routes = [{
         },{ 
             path: '/calender',
             component: Calender,
-            name: '我的日历'
+            name: '我的日程'
         }]
     },
     {
@@ -67,12 +74,18 @@ let routes = [{
             component: Task,
             name: '任务'
         },]
-    },{
+    },
+    {
         path: '/',
         component: Home,
         name: '高级管理',
         iconCls: 'el-icon-setting',//图标样式class
+        needAdmin: true,
         children: [{
+            path:'/anno',
+            component:Announcement,
+            name: '公告管理',
+        },{
             path: '/user',
             component: User,
             name: '用户管理'
@@ -81,13 +94,13 @@ let routes = [{
             component: Department,
             name: '部门管理'
         },{
+            path:'/admin',
+            component:Admin,
+            name: 'Admins管理'
+        },{
             path:'/team',
             component:Team,
             name: '项目管理'
-        },{
-            path:'/anno',
-            component:Announcement,
-            name: '公告管理'
         }]
     }
 ];

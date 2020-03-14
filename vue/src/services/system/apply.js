@@ -1,5 +1,5 @@
 import axios from '../util/axios.js'
-const baseurl='http://localhost:7000/apply/'
+const baseurl='http://192.168.1.6:7000/apply/'
 
 
 export const queryAll = (options) => axios.setAxiosGetPromise(baseurl+'queryAll')

@@ -10,6 +10,7 @@ import message from './modules/message'
 import task from './modules/task'
 import team from './modules/team'
 import user from './modules/user'
+import admin from './modules/admin'
 
 Vue.use(Vuex)
 
@@ -24,6 +25,7 @@ export default new Vuex.Store({
     department,
     message,
     task,
-    team
+    team,
+    admin
   }
 })

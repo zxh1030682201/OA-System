@@ -7,7 +7,7 @@ import * as message from './system/message'
 import * as task from './system/task'
 import * as team from './system/team'
 import * as user from './system/user.js'
-
+import * as admin from './system/admin'
 
 export default {
   //user的方法
@@ -20,6 +20,12 @@ export default {
   user_delete:user.deleteD,
   login:user.login,
   user_queryPage:user.queryPage,
+
+  // admin
+  admin_queryAll:admin.queryAll,
+  admin_add:admin.add,
+  admin_update:admin.update,
+  admin_delete:admin.deleteD,
 
   //anno
   anno_queryAll:announcement.queryAll,
@@ -41,6 +47,7 @@ export default {
   atd_queryAll:attendance.queryAll,
   atd_queryById:attendance.queryById,
   atd_queryByUser:attendance.queryByUser,
+  atd_queryByUD:attendance.queryByUD,
   atd_add:attendance.add,
   atd_update:attendance.update,
   atd_delete:attendance.deleteD,

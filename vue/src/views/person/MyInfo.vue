@@ -5,6 +5,9 @@
 				<el-form-item label="姓名" prop="name">
 					<el-input v-model="user.name" auto-complete="off"></el-input>
 				</el-form-item>
+        <el-form-item label="部门" prop="deptName">
+					<el-input v-model="user.deptName" auto-complete="off" :disabled="true"></el-input>
+				</el-form-item>
 				<el-form-item label="用户名" prop="username">
 					<el-input v-model="user.username" auto-complete="off"></el-input>
 				</el-form-item>
@@ -25,7 +28,7 @@
 				</el-form-item>
 			</el-form>
 			<div slot="footer" class="dialog-footer">
-				<el-button type="primary" @click.native="editSubmit">更新</el-button>
+				<el-button type="primary" @click.native="editSubmit()">更新</el-button>
 			</div>
   </div>
 </template>
@@ -34,6 +37,7 @@
 export default {
   data() {
     return {
+      loginUser:{},
       user:{},
       FormRules: {
         name: [{ required: true, message: '请输入姓名', trigger: 'blur' }],
@@ -46,18 +50,18 @@ export default {
   },
   created(){
     this.getLoginUser()
+    this.getThisUser()
   },
   methods:{
     getLoginUser(){
-      this.user = JSON.parse(sessionStorage.getItem('user'))
+      this.loginUser = JSON.parse(sessionStorage.getItem('user'))
     },
     getThisUser(){
-      this.$store.dispatch('user_queryById',this.user.userId).then(res=>{
+      this.$store.dispatch('user_queryById',this.loginUser.userId).then(res=>{
         this.user=res
-        sessionStorage.setItem('user', JSON.stringify(res));
       })
     },
-    			//编辑
+    //编辑
 		editSubmit() {
       this.$confirm('确认更新吗？', '提示', {}).then(() => {
         this.editLoading = true;
@@ -84,5 +88,4 @@ export default {
 </script>
 
 <style scoped>
-
 </style>

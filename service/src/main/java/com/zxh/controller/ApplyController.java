@@ -42,8 +42,17 @@ public class ApplyController {
 
     @PostMapping("/add")
     public String addUser(@RequestBody Map<String,Object> reqMap){
+        Integer applyUser=(int)reqMap.get("applyUser");
+        Integer approvalUser=(int)reqMap.get("approvalUser");
+        Integer applyType=(int)reqMap.get("applyType");
+        String startTime=reqMap.get("startTime").toString();
+        String endTime=reqMap.get("endTime").toString();
+        String applyReason=reqMap.get("applyReason").toString();
+        Integer applyStatus=(int)reqMap.get("applyStatus");
 
-        return applyService.add(getApply(reqMap));
+        Apply apply=new Apply(0,applyUser,null,approvalUser,null,applyType,startTime,endTime,applyReason,null,applyStatus);
+
+        return applyService.add(apply);
 
     }
 
@@ -76,9 +85,10 @@ public class ApplyController {
         String startTime=map.get("startTime").toString();
         String endTime=map.get("endTime").toString();
         String applyReason=map.get("applyReason").toString();
+        String approvalReason=map.get("approvalReason").toString();
         Integer applyStatus=(int)map.get("applyStatus");
 
-        Apply apply=new Apply(0,applyUser,approvalUser,applyType,startTime,endTime,applyReason,applyStatus);
+        Apply apply=new Apply(0,applyUser,null,approvalUser,null,applyType,startTime,endTime,applyReason,approvalReason,applyStatus);
 
         System.out.println("重新生成的apply   "+apply);
         return apply;

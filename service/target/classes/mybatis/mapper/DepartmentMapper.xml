@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.zxh.mapper.DepartmentMapper">
+    <select id="queryAll" resultType="Department">
+        select a.*,b.deptName as sdeptName,u.name as deptMName
+        from department a,department b,user u
+        where a.deptMId=u.userId and a.sdeptId=b.deptId
+    </select>
+
+    <select id="queryById" resultType="Department">
+        select * from department where deptId = #{deptId}
+    </select>
+
+    <select id="queryByName" resultType="Department">
+        select a.*,b.deptName as sdeptName,u.name as deptMName
+        from department a,department b,user u
+        where a.deptMId=u.userId and a.sdeptId=b.deptId and a.deptName LIKE '%${deptName}%'
+    </select>
+
+    <select id="queryByMId" resultType="Department">
+        select * from department
+        where deptMId = #{deptMId}
+    </select>
+
+    <select id="queryBySdeptId" resultType="Department">
+        select * from department
+        where sdeptId = #{sdeptId}
+    </select>
+
+    <insert id="add" parameterType="Department">
+        insert into department (deptName,sdeptId,deptMId)
+        values (#{deptName},#{sdeptId},#{deptMId})
+    </insert>
+
+    <update id="update" parameterType="Department">
+        update department set deptName=#{deptName},sdeptId=#{sdeptId},deptMId=#{deptMId}
+        where deptId=#{deptId}
+    </update>
+
+    <delete id="delete" parameterType="int">
+        delete from department where deptId = #{deptId}
+    </delete>
+</mapper>

@@ -28,6 +28,11 @@ public class AttendanceService {
         return attendances;
     }
 
+    public List<Attendance> queryByUD(int atdUser,String date){
+        List<Attendance> attendances = attendanceMapper.queryByUD(atdUser,date);
+        return attendances;
+    }
+
     public String add(Attendance attendance){
         attendanceMapper.add(attendance);
         return "新增考勤成功";

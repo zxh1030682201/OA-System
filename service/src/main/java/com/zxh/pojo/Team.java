@@ -11,5 +11,6 @@ public class Team {
     private int teamId;
     private String teamName;
     private int teamLeader;
+    private String teamLeaderName;
     private String teamMembers;
 }

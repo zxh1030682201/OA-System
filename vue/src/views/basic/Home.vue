@@ -60,7 +60,7 @@
           >
 						<!-- 一级菜单 -->
             <el-submenu
-						  v-if="!item.hidden"
+						  v-if="(!item.hidden) && (!item.needAdmin || item.needAdmin == isAdmin)"
               :index="index+''"
             >
               <template slot="title"><i :class="item.iconCls"></i>{{item.name}}</template>
@@ -124,7 +124,8 @@ export default {
       loginUser:{},
       sysUserName: '',
       sysUserAvatar: '',
-      message:0
+      message:0,
+      isAdmin: false,
     }
   },
   methods: {
@@ -137,6 +138,7 @@ export default {
       this.$confirm('确认退出吗?', '提示', {
       }).then(() => {
         sessionStorage.removeItem('user');
+        sessionStorage.removeItem('isRememberPW')
         this.$router.push('/login');
       })
     },
@@ -149,16 +151,28 @@ export default {
     getURMsg(){
       this.$store.dispatch('msg_queryByRU',this.loginUser.userId).then(res=>{
         this.message=res.length
-        console.log(this.message)
+      })
+    },
+    getAllAdmins(){
+      this.$store.dispatch('admin_queryAll').then(res=>{
+        for(let admin of res){
+          if(admin.userId == JSON.parse(sessionStorage.getItem('user')).userId){
+            this.isAdmin = true
+            break
+          }
+        }
       })
     }
 
   },
   created(){
+    this.getAllAdmins()
     var user = sessionStorage.getItem('user');
     if (user) {
-      console.log("当前登录的用户\n"+user)
       this.loginUser = JSON.parse(user);
+      console.log("当前登录的用户")
+      console.log(this.loginUser)
+      console.log("============================")
       this.sysUserName = this.loginUser.name || '';
     }
     this.getURMsg()

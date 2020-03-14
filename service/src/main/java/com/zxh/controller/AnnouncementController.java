@@ -45,9 +45,7 @@ public class AnnouncementController {
 
     @DeleteMapping("/delete/{annoId}")
     public String deleteUser(@PathVariable("annoId") Integer annoId){
-
         return announcementService.delete(annoId);
-
     }
 
 

@@ -32,6 +32,12 @@ public class AttendanceController {
         return attendances;
     }
 
+    @GetMapping("/queryByUD")
+    public List<Attendance> queryByUD(@RequestParam("userId")int atdUser,@RequestParam("date")String date){
+        List<Attendance> attendances= attendanceService.queryByUD(atdUser,date);
+        return attendances;
+    }
+
     @PostMapping("/add")
     public String add(@RequestBody Map<String,Object> reqMap){
         return attendanceService.add(getArd(reqMap));
@@ -57,8 +63,9 @@ public class AttendanceController {
         Integer atdUser=(int)map.get("atdUser");
         String checkInTime=map.get("checkInTime").toString();
         String checkOutTime=map.get("checkOutTime").toString();
+        String checkDate=map.get("checkDate").toString();
 
-        Attendance attendance=new Attendance(0,atdUser,checkInTime,checkOutTime);
+        Attendance attendance=new Attendance(0,atdUser,checkDate,checkInTime,checkOutTime);
         return attendance;
 
     }

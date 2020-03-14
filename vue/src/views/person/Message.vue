@@ -24,12 +24,12 @@
               </el-table-column>
               <el-table-column width="120">
                   <template slot-scope="scope">
-                      <el-button size="small" @click="handleRead(scope.$index,scope.row)">标为已读</el-button>
+                      <el-button size="small" @click="readSubmit(scope.$index,scope.row)">标为已读</el-button>
                   </template>
               </el-table-column>
             </el-table>
             <div class="handle-row">
-                <el-button type="primary" @click="handleNewMsg()">发送新消息</el-button>
+                <el-button type="primary" @click="handleAdd()">发送新消息</el-button>
                 <el-button type="danger">全部标为已读</el-button>
             </div>
         </el-tab-pane>
@@ -46,7 +46,7 @@
             </el-table-column>
             <el-table-column width="120">
                 <template slot-scope="scope">
-                    <el-button size="small" type="danger" @click="handleDel(scope.$index, scope.row)">删除</el-button>
+                    <el-button size="small" type="danger" @click="delSubmit(scope.$index, scope.row)">删除</el-button>
                 </template>
             </el-table-column>
           </el-table>
@@ -64,7 +64,7 @@
             </el-table-column>
             <el-table-column width="120">
                 <template slot-scope="scope">
-                    <el-button size="small" type="danger" @click="handleDel(scope.$index, scope.row)">删除</el-button>
+                    <el-button size="small" type="danger" @click="delSubmit(scope.$index, scope.row)">删除</el-button>
                 </template>
             </el-table-column>
           </el-table>
@@ -77,16 +77,16 @@
       <el-dialog title="信息详情" :visible.sync="msgFormVisible">
         <el-form :model="msgForm" label-width="80px" ref="msgForm">
           <el-form-item label="发送人" prop="senderName" >
-            <el-input v-model="msgForm.senderName"></el-input>
+            <el-input v-model="msgForm.senderName" :disabled="true"></el-input>
           </el-form-item>
           <el-form-item label="主题" prop="msgTheme" >
-            <el-input v-model="msgForm.msgTheme"></el-input>
+            <el-input v-model="msgForm.msgTheme" :disabled="true"></el-input>
           </el-form-item>
           <el-form-item label="内容" prop="msgContent" >
             <el-input v-model="msgForm.msgContent" type="textarea" :rows="3"></el-input>
           </el-form-item>
           <el-form-item label="发送时间" prop="sendTime" >
-            <el-input v-model="msgForm.sendTime"></el-input>
+            <el-input v-model="msgForm.sendTime" :disabled="true"></el-input>
           </el-form-item>
         </el-form>
       </el-dialog>
@@ -105,15 +105,15 @@
             </el-select>
           </el-form-item>
           <el-form-item label="主题" prop="msgTheme" >
-            <el-input v-model="newMsgForm.msgTheme" ></el-input>
+            <el-input v-model="newMsgForm.msgTheme" placeholder="请输入标题" clearable></el-input>
           </el-form-item>
           <el-form-item label="内容" prop="msgContent" >
-            <el-input v-model="newMsgForm.msgContent" type="textarea" :rows="3"></el-input>
+            <el-input v-model="newMsgForm.msgContent" type="textarea" placeholder="请输入内容" :rows="3"></el-input>
           </el-form-item>
         </el-form>
         <div slot="footer" class="dialog-footer">
           <el-button @click.native="newMsgVisible = false">取消</el-button>
-          <el-button type="primary" @click.native="handleSend()">发送</el-button>
+          <el-button type="primary" @click.native="sendSubmit()">发送</el-button>
         </div>
       </el-dialog>
     </div>
@@ -161,87 +161,6 @@
         this.loginUser = JSON.parse(user)
       },
 
-      //显示信息详情窗口
-      handleCheckMsg(row){
-        this.msgFormVisible=true
-        this.msgForm=Object.assign({},row)
-      },
-
-      //显示新增信息窗口
-      handleNewMsg(){
-        this.newMsgVisible = true
-      },
-
-      //发送新消息
-      handleSend(){
-        this.$refs.newMsgForm.validate((valid) => {
-					if (valid) {
-            this.$confirm('确认提交吗？', '提示', {}).then(() => {
-              let para = Object.assign({}, this.newMsgForm);
-              para.sender=this.loginUser.userId
-              this.$store.dispatch('msg_add',para).then(res=>{
-                if(res.data == "添加消息成功"){
-                  this.$message({
-                    message: "发送成功",
-                    type: 'success'
-                  });
-                  this.$refs['newMsgForm'].resetFields();
-                  this.newMsgVisible = false;
-                  this.getUnReadMsg()
-                  this.getAllSend()
-                }else{
-                  this.$message({
-                    message: res.data,
-                    type: 'error'
-                  });
-                }
-              })
-              
-            })
-          }
-        })
-      },
-
-      // 标记已读
-      handleRead(index,row) {
-        let para = Object.assign({},row)
-        para.readed=1
-        console.log(para)
-        this.$store.dispatch('msg_update',para).then(res=>{
-          if(res.data=="OK"){
-            this.$message({
-              message: "消息已读",
-              type: 'success'
-            })
-            this.getUnReadMsg()
-            this.getReadedMsg()
-          }else{
-            this.$message({
-              message: res.data,
-              type: 'error'
-            });
-          }
-        })
-      },
-
-      // 删除消息
-      handleDel(index,row) {
-        this.$store.dispatch('msg_delete',row.msgId).then(res=>{
-          if(res.data=="OK"){
-            this.$message({
-              message: "删除消息成功",
-              type: 'success'
-            })
-            this.getReadedMsg()
-            this.getAllSend()
-          }else{
-            this.$message({
-              message: res.data,
-              type: 'error'
-            });
-          }
-        })
-      },
 
       // 获取所有公告信息
       getAllAnno(){
@@ -272,7 +191,89 @@
         this.$store.dispatch('user_queryAll').then(res=>{
           this.users=res
         })
-      }
+      },
+
+      //显示信息详情窗口
+      handleCheckMsg(row){
+        this.msgFormVisible=true
+        this.msgForm=Object.assign({},row)
+      },
+      //显示新增信息窗口
+      handleAdd(){
+        this.newMsgVisible = true
+      },
+
+
+
+      //发送新消息
+      sendSubmit(){
+        this.$refs.newMsgForm.validate((valid) => {
+					if (valid) {
+            this.$confirm('确认提交吗？', '提示', {}).then(() => {
+              let para = Object.assign({}, this.newMsgForm);
+              para.sender=this.loginUser.userId
+              this.$store.dispatch('msg_add',para).then(res=>{
+                if(res.data == "添加消息成功"){
+                  this.$message({
+                    message: "发送成功",
+                    type: 'success'
+                  });
+                  this.$refs['newMsgForm'].resetFields();
+                  this.newMsgVisible = false;
+                  this.getUnReadMsg()
+                  this.getAllSend()
+                }else{
+                  this.$message({
+                    message: res.data,
+                    type: 'error'
+                  });
+                }
+              })
+              
+            })
+          }
+        })
+      },
+      // 标记已读
+      readSubmit(index,row) {
+        let para = Object.assign({},row)
+        para.readed=1
+        console.log(para)
+        this.$store.dispatch('msg_update',para).then(res=>{
+          if(res.data=="OK"){
+            this.$message({
+              message: "消息已读",
+              type: 'success'
+            })
+            this.getUnReadMsg()
+            this.getReadedMsg()
+          }else{
+            this.$message({
+              message: res.data,
+              type: 'error'
+            });
+          }
+        })
+      },
+      // 删除消息
+      delSubmit(index,row) {
+        this.$store.dispatch('msg_delete',row.msgId).then(res=>{
+          if(res.data=="OK"){
+            this.$message({
+              message: "删除消息成功",
+              type: 'success'
+            })
+            this.getReadedMsg()
+            this.getAllSend()
+          }else{
+            this.$message({
+              message: res.data,
+              type: 'error'
+            });
+          }
+        })
+      },
+
     },
     created(){
       this.getLoginUser()

@@ -1,8 +1,12 @@
 package com.zxh.service;
 
+import com.zxh.mapper.AdminMapper;
 import com.zxh.mapper.DepartmentMapper;
+import com.zxh.mapper.TeamMapper;
 import com.zxh.mapper.UserMapper;
+import com.zxh.pojo.Admin;
 import com.zxh.pojo.Department;
+import com.zxh.pojo.Team;
 import com.zxh.pojo.User;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
@@ -15,9 +19,13 @@ public class UserService {
 
     @Autowired
     private UserMapper userMapper;
-
     @Autowired
     private DepartmentMapper departmentMapper;
+    @Autowired
+    private AdminMapper adminMapper;
+    @Autowired
+    private TeamMapper teamMapper;
+
 
     public List<User> queryAll(){
         List<User> userList = userMapper.queryAll();
@@ -77,11 +85,23 @@ public class UserService {
 
     public String delete(int userId){
         Department department=departmentMapper.queryByMId(userId);
-        if(department == null){
+        Admin admin=adminMapper.queryByUser(userId);
+        List<Team> teams=teamMapper.queryByLeader(userId);
+        System.out.println("hello   "+teams+"============================================");
+        if(department == null && admin ==null && teams.size() == 0){
             userMapper.delete(userId);
             return "删除用户成功";
-        }else{
+        }
+        if(department != null){
             return "存在用户主管的部门，不能删除";
+        }
+        if(admin != null){
+            return "存在此用户管理员账号，不能删除";
+        }
+        if(teams.size()!=0){
+            return "存在用户负责的项目，不能删除";
+        }else {
+            return "未知错误";
         }
     }
 
