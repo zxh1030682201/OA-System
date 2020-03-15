@@ -1,5 +1,6 @@
 import axios from '../util/axios.js'
-const baseurl='http://192.168.1.6:7000/user/'
+import cfg from '../util/urlConfig'
+const baseurl=cfg.service+'user/'
 
 export const login = (options) => axios.setAxiosPostPromise(baseurl+'login',options)
 

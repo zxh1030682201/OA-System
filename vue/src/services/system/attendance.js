@@ -1,5 +1,6 @@
 import axios from '../util/axios.js'
-const baseurl='http://192.168.1.6:7000/atd/'
+import cfg from '../util/urlConfig'
+const baseurl=cfg.service+'atd/'
 
 export const queryAll = (options) => axios.setAxiosGetPromise(baseurl+'queryAll')
 
