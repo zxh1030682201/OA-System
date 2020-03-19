@@ -33,7 +33,7 @@
         </el-container>
       </el-tab-pane>
 
-      <el-tab-pane label="我的审批">
+      <el-tab-pane label="我的审批" v-if="this.loginUser.role >= 2">
         <el-container style="height:550px">
           <el-main>
             <!--列表-->

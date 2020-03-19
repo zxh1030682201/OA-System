@@ -32,7 +32,7 @@
         </el-container>
       </el-tab-pane>
 
-      <el-tab-pane label="我发布的任务" v-if="!(this.myTeams.length == 0)">
+      <el-tab-pane label="我发布的任务" v-if="this.loginUser.role >= 2">
         <el-container style="height:550px">
           <el-main>
             <el-table :data="myPublishs" highlight-current-row>
@@ -62,7 +62,7 @@
             </el-table>
           </el-main>
           <el-footer>
-            <el-button type="primary" v-on:click="handleAdd()">发布新任务</el-button>
+            <el-button type="primary" v-on:click="handleAdd()" v-if="!(this.myTeams.length == 0)">发布新任务</el-button>
           </el-footer>
         </el-container>
       </el-tab-pane>
@@ -195,6 +195,12 @@ export default {
       }
     }
   },
+  created(){
+    this.getLoginUser()
+    this.getMyTasks()
+    this.getMyPublishs()
+    this.getMyTeams()
+  },
   methods:{
     //审批状态转换
     formatStatus(row,column){
@@ -235,19 +241,21 @@ export default {
     getMyTeams(){
       this.$store.dispatch('team_queryByLeader',this.loginUser.userId).then(res=>{
         this.myTeams=res
-        for(let i =0;i<res.length-1;i++){
-          this.teamMemberIdStr=this.teamMemberIdStr+res[i].teamMembers+','
-        }
-        this.teamMemberIdStr=this.teamMemberIdStr+res[res.length-1].teamMembers
+        if(res.length != 0){
+          for(let i =0;i<res.length-1;i++){
+            this.teamMemberIdStr=this.teamMemberIdStr+res[i].teamMembers+','
+          }
+          this.teamMemberIdStr=this.teamMemberIdStr+res[res.length-1].teamMembers
 
-        this.teamMemberIds = this.teamMemberIdStr.split(",");
-        this.teamMemberIds = this.teamMemberIds.filter((elem, index, self) => {
-          return index == self.indexOf(elem)
-        })
-        for(let id of this.teamMemberIds){
-          this.$store.dispatch('user_queryById',id).then(res=>{
-            this.teamMembers.push(res)
+          this.teamMemberIds = this.teamMemberIdStr.split(",");
+          this.teamMemberIds = this.teamMemberIds.filter((elem, index, self) => {
+            return index == self.indexOf(elem)
           })
+          for(let id of this.teamMemberIds){
+            this.$store.dispatch('user_queryById',id).then(res=>{
+              this.teamMembers.push(res)
+            })
+          }
         }
       })
     },
@@ -257,8 +265,6 @@ export default {
       this.contentDetail=content
       this.detailVisible=true
     },
-
-
 
     // 我的任务界面开始任务
     handleStart(index,row){
@@ -392,12 +398,6 @@ export default {
 
 
     
-  },
-  created(){
-    this.getLoginUser()
-    this.getMyTasks()
-    this.getMyPublishs()
-    this.getMyTeams()
   }
 }
 </script>

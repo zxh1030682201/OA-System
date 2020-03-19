@@ -87,6 +87,7 @@ public class UserController {
 
         System.out.println("获取到的map   "+map);
 
+        Integer role=(int)map.get("role");
         String name=map.get("name").toString();
         String username=map.get("username").toString();
         String password=map.get("password").toString();
@@ -95,7 +96,7 @@ public class UserController {
         String email=map.get("email").toString();
         Integer deptId=(int)map.get("deptId");
         Integer userStatus=(int)map.get("userStatus");
-        User user = new User(0,name,username,password,gender,tel,email,deptId,null,userStatus);
+        User user = new User(0,role,name,username,password,gender,tel,email,deptId,null,userStatus);
 
         System.out.println("重新生成的user   "+user);
         return user;

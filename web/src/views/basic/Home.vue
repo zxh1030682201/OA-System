@@ -60,17 +60,20 @@
           >
 						<!-- 一级菜单 -->
             <el-submenu
-						  v-if="(!item.hidden) && (!item.needAdmin || item.needAdmin == isAdmin)"
+						  v-show="(!item.hidden) && (loginUser.role >= item.role)"
               :index="index+''"
             >
               <template slot="title"><i :class="item.iconCls"></i>{{item.name}}</template>
-              <el-menu-item
-                v-for="child in item.children"
-                :index="child.path"
+              <div 
+                v-for="child in item.children" 
                 :key="child.path"
-              >{{child.name}}</el-menu-item>
+              >
+                <el-menu-item
+                  :index="child.path"
+                  v-show="loginUser.role >= child.role"
+                >{{child.name}}</el-menu-item>
+              </div>
             </el-submenu>
-
           </div>
         </el-menu>
       </aside>
@@ -124,8 +127,7 @@ export default {
       loginUser:{},
       sysUserName: '',
       sysUserAvatar: '',
-      message:0,
-      isAdmin: false,
+      message:0
     }
   },
   methods: {
@@ -152,21 +154,10 @@ export default {
       this.$store.dispatch('msg_queryByRU',this.loginUser.userId).then(res=>{
         this.message=res.length
       })
-    },
-    getAllAdmins(){
-      this.$store.dispatch('admin_queryAll').then(res=>{
-        for(let admin of res){
-          if(admin.userId == JSON.parse(sessionStorage.getItem('user')).userId){
-            this.isAdmin = true
-            break
-          }
-        }
-      })
     }
 
   },
   created(){
-    this.getAllAdmins()
     var user = sessionStorage.getItem('user');
     if (user) {
       this.loginUser = JSON.parse(user);

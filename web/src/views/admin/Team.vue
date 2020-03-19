@@ -122,14 +122,13 @@
 export default {
   data() {
     return {
-      isAdmin:false,
-
+      loginUser:{},
       editVisible: false,
       newVisible:false,
 
-				FormRules: {
-					teamName: [{ required: true, message: '请输入姓名', trigger: 'blur' }]
-				},
+      FormRules: {
+        teamName: [{ required: true, message: '请输入姓名', trigger: 'blur' }]
+      },
 
       newTeamMember: 1,
       users:[],
@@ -149,7 +148,17 @@ export default {
       },
     }
   },
+  created(){
+    this.getLoginUser()
+    this.getAllTeam()
+    this.getAllUser()
+  },
   methods:{
+    //查询登录的用户
+    getLoginUser(){
+      var user = sessionStorage.getItem('user');
+      this.loginUser = JSON.parse(user)
+    },
     //状态转换
     formatStatus(row,column){
         switch(row.userStatus){
@@ -170,28 +179,6 @@ export default {
     //性别显示转换
     formatSex(row, column){
       return row.gender == 1 ? '男' : row.gender == 0 ? '女' : '未知';
-    },
-    //检查当前登录者是否是管理员
-    checkAdmin(){
-      if(this.isAdmin == false){
-        this.$message({
-          message: '权限不足,请联系管理员',
-          type: 'error'
-        });
-        this.$router.push({ path: '/message' });
-      }
-    },
-    // 获取所有管理员
-    getAllAdmins(){
-      this.$store.dispatch('admin_queryAll').then(res=>{
-        for(let admin of res){
-          if(admin.userId == JSON.parse(sessionStorage.getItem('user')).userId){
-            this.isAdmin = true
-            break
-          }
-        }
-        this.checkAdmin()
-      })
     },
     // 获取所有项目
     getAllTeam(){
@@ -342,11 +329,6 @@ export default {
       })
     },
 
-  },
-  created(){
-    this.getAllAdmins()
-    this.getAllTeam()
-    this.getAllUser()
   }
 }
 </script>

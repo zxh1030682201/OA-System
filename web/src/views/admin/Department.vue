@@ -138,18 +138,12 @@
 				filters: {
 					name: ''
 				},
-				isAdmi:false,
-
+				loginUser:{},
 				users:[],	//编辑和新增时供选择的users
-
 				deptUsers:[],//查询部门员工
-
 				chooseDepts:[],//编辑和新增时供选择的depts
-
 				depts:[],
-
 				sels: [],//列表选中列
-
 				deptUsersVisible: false,
 
 				editFormVisible: false,//编辑界面是否显示
@@ -182,18 +176,18 @@
 
 			}
 		},
+		created() {
+			this.getLoginUser()
+			this.getDepts()
+			this.getAllUser()
+			this.getAllDept()
+		},
 		methods: {
-			//检查当前登录者是否是管理员
-			checkAdmin(){
-				if(this.isAdmin == false){
-					this.$message({
-						message: '权限不足,请联系管理员',
-						type: 'error'
-					});
-					this.$router.push({ path: '/message' });
-				}
-			},
-
+			//查询登录的用户
+      getLoginUser(){
+        var user = sessionStorage.getItem('user');
+        this.loginUser = JSON.parse(user)
+      },
 			//状态转换
 			formatStatus(row,column){
 					switch(row.userStatus){
@@ -218,18 +212,7 @@
 
 
 
-			//检查当前登录者是否是管理员
-			getAllAdmins(){
-				this.$store.dispatch('admin_queryAll').then(res=>{
-					for(let admin of res){
-						if(admin.userId == JSON.parse(sessionStorage.getItem('user')).userId){
-							this.isAdmin = true
-							break
-						}
-					}
-					this.checkAdmin()
-				})
-    	},
+
 			//查询所有部门
 			getAllDept(){
 				this.$store.dispatch('dept_queryAll').then(res=>{
@@ -350,12 +333,6 @@
 
 
 
-		},
-		created() {
-			this.getAllAdmins()
-			this.getDepts()
-			this.getAllUser()
-			this.getAllDept()
 		}
 	}
 

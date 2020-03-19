@@ -30,12 +30,12 @@
     </select>
 
     <insert id="add" parameterType="User">
-        insert into user (name,username,password,gender,tel,email,deptId,userStatus)
-        values (#{name},#{username},#{password},#{gender},#{tel},#{email},#{deptId},#{userStatus})
+        insert into user (role,name,username,password,gender,tel,email,deptId,userStatus)
+        values (#{role},#{name},#{username},#{password},#{gender},#{tel},#{email},#{deptId},#{userStatus})
     </insert>
 
     <update id="update" parameterType="User">
-        update user set name=#{name},username=#{username},password=#{password},
+        update user set role=#{role},name=#{name},username=#{username},password=#{password},
         gender=#{gender},tel=#{tel},email=#{email},deptId=#{deptId},userStatus=#{userStatus}
         where userId=#{userId}
     </update>

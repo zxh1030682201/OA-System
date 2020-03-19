@@ -62,9 +62,8 @@
 		data() {
 			return {
 				annos:[],
-				isAdmin:false,
 				sels: [],//列表选中列
-				
+				loginUser:{},
 				editFormVisible: false,//编辑界面是否显示
 
 				addFormVisible: false,//新增界面是否显示
@@ -89,36 +88,21 @@
 
 			}
 		},
+		created() {
+			this.getLoginUser()
+			this.getAllAnno()
+		},
 		methods: {
-			//检查当前登录者是否是管理员
-			checkAdmin(){
-				if(this.isAdmin == false){
-					this.$message({
-						message: '权限不足,请联系管理员',
-						type: 'error'
-					});
-					this.$router.push({ path: '/message' });
-				}
-			},
-
 			//处理多选内容
 			selsChange: function (sels) {
 				this.sels = sels;
 			},
 
-
-			//检查当前登录者是否是管理员
-			getAllAdmins(){
-				this.$store.dispatch('admin_queryAll').then(res=>{
-					for(let admin of res){
-						if(admin.userId == JSON.parse(sessionStorage.getItem('user')).userId){
-							this.isAdmin = true
-							break
-						}
-					}
-					this.checkAdmin()
-				})
-			},
+      //查询登录的用户
+      getLoginUser(){
+        var user = sessionStorage.getItem('user');
+        this.loginUser = JSON.parse(user)
+      },
 			//获取全部公告
       getAllAnno(){
         this.$store.dispatch('anno_queryAll').then(res=>{
@@ -127,7 +111,6 @@
 			},
 			
 
-			
 			//新增操作
 			handleAdd() {
 				this.addFormVisible = true;
@@ -159,8 +142,6 @@
 					})
 				})
 			},
-
-
 
 			//确认编辑
 			editSubmit() {
@@ -237,10 +218,6 @@
 
 		},
 		mounted() {
-		},
-		created() {
-			this.getAllAdmins()
-			this.getAllAnno()
 		}
 	}
 

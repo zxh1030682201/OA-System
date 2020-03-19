@@ -151,7 +151,13 @@
         }
       }
     },
-    computed: {
+    created(){
+      this.getLoginUser()
+      this.getAllAnno()
+      this.getAllUsers()
+      this.getUnReadMsg()
+      this.getReadedMsg()
+      this.getAllSend()
     },
     methods: {
 
@@ -274,14 +280,6 @@
         })
       },
 
-    },
-    created(){
-      this.getLoginUser()
-      this.getAllAnno()
-      this.getAllUsers()
-      this.getUnReadMsg()
-      this.getReadedMsg()
-      this.getAllSend()
     }
   }
 

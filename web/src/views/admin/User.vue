@@ -27,6 +27,8 @@
 			</el-table-column>
 			<el-table-column prop="username" label="用户名" :show-overflow-tooltip="true" sortable>
 			</el-table-column>
+			<el-table-column prop="role" label="权限" :formatter="formatRole" sortable>
+			</el-table-column>
 			<el-table-column prop="gender" label="性别" width="100" :formatter="formatSex" sortable>
 			</el-table-column>
 			<el-table-column prop="tel" label="电话" :show-overflow-tooltip="true" sortable>
@@ -60,6 +62,13 @@
 				</el-form-item>
 				<el-form-item label="用户名" prop="username">
 					<el-input v-model="editForm.username" auto-complete="off"></el-input>
+				</el-form-item>
+				<el-form-item label="权限" prop="role">
+					<el-radio-group v-model="editForm.role">
+						<el-radio class="radio" :label="1">普通员工</el-radio>
+						<el-radio class="radio" :label="2">管理员</el-radio>
+						<el-radio class="radio" :label="3">超级管理员</el-radio>
+					</el-radio-group>
 				</el-form-item>
 				<el-form-item label="密码" prop="password">
 					<el-input v-model="editForm.password" auto-complete="off"></el-input>
@@ -110,6 +119,13 @@
 				</el-form-item>
 				<el-form-item label="用户名" prop="username">
 					<el-input v-model="addForm.username" auto-complete="off"></el-input>
+				</el-form-item>
+				<el-form-item label="权限" prop="role">
+					<el-radio-group v-model="addForm.role">
+						<el-radio class="radio" :label="1">普通员工</el-radio>
+						<el-radio class="radio" :label="2">管理员</el-radio>
+						<el-radio class="radio" :label="3">超级管理员</el-radio>
+					</el-radio-group>
 				</el-form-item>
 				<el-form-item label="密码" prop="password">
 					<el-input v-model="addForm.password" auto-complete="off"></el-input>
@@ -163,7 +179,7 @@
 				filters: {
 					name: ''
 				},
-				isAdmin:false,
+				loginUser:{},
 				users: [],
 				depts:[],
 				total: 0,
@@ -188,6 +204,7 @@
 					userId: 0,
 					name: '',
 					username:'',
+					role:1,
 					password:'',
 					gender: 1,
 					tel:'',
@@ -200,6 +217,7 @@
 				addForm: {
 					name: '',
 					username:'',
+					role:1,
 					password:'',
 					gender: 1,
 					tel:'',
@@ -210,29 +228,17 @@
 
 			}
 		},
+		created() {
+			this.getLoginUser()
+			this.getUsersByPage()
+			this.getAllDepts()
+		},
 		methods: {
-			//检查当前登录者是否是管理员
-			checkAdmin(){
-				if(this.isAdmin == false){
-					this.$message({
-						message: '权限不足,请联系管理员',
-						type: 'error'
-					});
-					this.$router.push({ path: '/message' });
-				}
-			},
-			//检查当前登录者是否是管理员
-			getAllAdmins(){
-				this.$store.dispatch('admin_queryAll').then(res=>{
-					for(let admin of res){
-						if(admin.userId == JSON.parse(sessionStorage.getItem('user')).userId){
-							this.isAdmin = true
-							break
-						}
-					}
-					this.checkAdmin()
-				})
-			},
+			//查询登录的用户
+      getLoginUser(){
+        var user = sessionStorage.getItem('user');
+        this.loginUser = JSON.parse(user)
+      },
 
 			// 多选切换
 			selsChange: function (sels) {
@@ -261,7 +267,20 @@
 							break
 					}
 			},
-
+			//状态转换
+			formatRole(row,column){
+					switch(row.role){
+						case 1:
+							return '普通员工'
+							break
+						case 2:
+							return '管理员'
+							break
+						case 3:
+							return '超级管理员'
+							break
+					}
+			},
 			//更改页码操作
 			handleCurrentChange(val) {
 				this.page = val;
@@ -402,11 +421,6 @@
 
 		},
 
-		created() {
-			this.getAllAdmins()
-			this.getUsersByPage()
-			this.getAllDepts()
-		}
 	}
 
 </script>
