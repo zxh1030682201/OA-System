@@ -14,14 +14,14 @@ public class MeetingController {
     @Autowired
     private MeetingService meetingService;
 
-    @GetMapping("/queryByOrganizer")
-    public List<Meeting> queryByOrganizer(@RequestParam("organizer")int organizer){
+    @GetMapping("/queryByOrganizer/{organizer}")
+    public List<Meeting> queryByOrganizer(@PathVariable("organizer")int organizer){
         List<Meeting> meetings = meetingService.queryByOrganizer(organizer);
         return meetings;
     }
 
-    @GetMapping("/queryByMember")
-    public List<Meeting> queryByMember(@RequestParam("member")int member){
+    @GetMapping("/queryByMember/{member}")
+    public List<Meeting> queryByMember(@PathVariable("member")int member){
         List<Meeting> meetings = meetingService.queryByMember(member);
         return meetings;
     }

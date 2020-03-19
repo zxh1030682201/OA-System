@@ -7,7 +7,7 @@ import * as message from './system/message'
 import * as task from './system/task'
 import * as team from './system/team'
 import * as user from './system/user.js'
-import * as admin from './system/admin'
+import * as meeting from './system/meeting'
 
 export default {
   //user的方法
@@ -20,12 +20,6 @@ export default {
   user_delete:user.deleteD,
   login:user.login,
   user_queryPage:user.queryPage,
-
-  // admin
-  admin_queryAll:admin.queryAll,
-  admin_add:admin.add,
-  admin_update:admin.update,
-  admin_delete:admin.deleteD,
 
   //anno
   anno_queryAll:announcement.queryAll,
@@ -94,5 +88,13 @@ export default {
   team_queryByLeader:team.queryByLeader,
   team_add:team.add,
   team_update:team.update,
-  team_delete:team.deleteD
+  team_delete:team.deleteD,
+
+  // meeting
+  meeting_queryById:meeting.queryById,
+  meeting_queryByOrganizer:meeting.queryByOrganizer,
+  meeting_queryByMember:meeting.queryByMember,
+  meeting_add:meeting.add,
+  meeting_update:meeting.update,
+  meeting_delete:meeting.deleteD
 }

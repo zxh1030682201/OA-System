@@ -5,13 +5,13 @@
 
 <mapper namespace="com.zxh.mapper.MeetingMapper">
     <select id="queryByOrganizer" resultType="Meeting">
-        select meeting.*,user.name as organizerName from meeting,user
-        where meeting.organizer = user.userId
+        select meeting.*,user.name as memberName from meeting,user
+        where meeting.member = user.userId and meeting.organizer=#{organizer}
     </select>
 
     <select id="queryByMember" resultType="Meeting">
-        select meeting.*,user.name as memberName from meeting,user
-        where meeting.member = user.userId
+        select meeting.*,user.name as organizerName from meeting,user
+        where meeting.organizer = user.userId and meeting.member=#{member}
     </select>
 
     <select id="queryById" resultType="Meeting">
