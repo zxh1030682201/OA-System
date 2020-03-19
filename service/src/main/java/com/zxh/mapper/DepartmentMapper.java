@@ -15,7 +15,7 @@ public interface DepartmentMapper {
 
     Department queryById(Integer deptId);
 
-    Department queryBySdeptId(Integer sdeptId);
+    List<Department> queryBySdeptId(Integer sdeptId);
 
     Department queryByMId(Integer deptMId);
 

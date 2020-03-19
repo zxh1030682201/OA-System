@@ -33,12 +33,14 @@
         </el-container>
       </el-tab-pane>
 
-      <el-tab-pane label="我的审批" v-if="this.loginUser.role >= 2">
+      <el-tab-pane label="我的审批" v-if="this.loginUser.role >= 3">
         <el-container style="height:550px">
           <el-main>
             <!--列表-->
             <el-table :data="myApprovals" highlight-current-row>
               <el-table-column prop="applyId" label="申请编号" sortable>
+              </el-table-column>
+              <el-table-column prop="applyUserName" label="申请人" sortable>
               </el-table-column>
               <el-table-column prop="applyType" label="申请类型" :formatter="formatStatus1" sortable>
               </el-table-column>
@@ -125,6 +127,7 @@ export default {
         value1: '',
         loginUser:{},
         loginUserDept:{},
+        loginUserSDept:{},
         myApplys:[],
         myApprovals:[],
 
@@ -206,7 +209,11 @@ export default {
       getLoginUserDept(){
         this.$store.dispatch('dept_queryById',this.loginUser.deptId).then(res=>{
           this.loginUserDept=res
+          this.$store.dispatch('dept_queryById',this.loginUserDept.sdeptId).then(res=>{
+            this.loginUserSDept=res
+          })
         })
+        
       },
       // 查询登录用户的申请
       getAllMyApply(){
@@ -281,10 +288,13 @@ export default {
       // 确认新建
       addSubmit(){
         this.newForm.applyUser=this.loginUser.userId
-        this.newForm.approvalUser=this.loginUserDept.deptMId
+        if(this.loginUser.userId==this.loginUserDept.deptMId){
+          this.newForm.approvalUser=this.loginUserSDept.deptMId
+        }else{
+          this.newForm.approvalUser=this.loginUserDept.deptMId
+        }
         this.newForm.startTime=util.formatDate.format(this.newForm.time[0],'yyyy-MM-dd'),
         this.newForm.endTime=util.formatDate.format(this.newForm.time[1],'yyyy-MM-dd'),
-
         this.$confirm('确认提交申请吗？', '提示', {}).then(() => {
           this.$store.dispatch('apply_add',this.newForm).then(res=>{
             if(res.data == "新增申请成功"){

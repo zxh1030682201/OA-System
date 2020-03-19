@@ -10,7 +10,7 @@
 					<el-button type="primary" v-on:click="getUsersByPage()">查询</el-button>
 				</el-form-item>
 				<el-form-item>
-					<el-button type="primary" @click="handleAdd()">新增</el-button>
+					<el-button type="primary" @click="handleAdd()" v-if="this.loginUser.role == 4">新增</el-button>
 				</el-form-item>
 			</el-form>
 		</el-col>
@@ -41,15 +41,15 @@
 			</el-table-column>
 			<el-table-column label="操作" width="150">
 				<template slot-scope="scope">
-					<el-button size="small" @click="handleEdit(scope.$index, scope.row)">编辑</el-button>
-					<el-button type="danger" size="small" @click="handleDel(scope.$index, scope.row)">删除</el-button>
+					<el-button size="small" @click="handleEdit(scope.$index, scope.row)" :disabled="!(loginUser.role == 4 || (loginUser.role==3 && scope.row.deptId == loginUser.deptId ))">编辑</el-button>
+					<el-button type="danger" size="small" @click="handleDel(scope.$index, scope.row)" :disabled="!(loginUser.role == 4)">删除</el-button>
 				</template>
 			</el-table-column>
 		</el-table>
 
 		<!--工具条-->
 		<el-col :span="24" class="toolbar">
-			<el-button type="danger" @click="batchRemove()" :disabled="this.sels.length===0">批量删除</el-button>
+			<el-button type="danger" @click="batchRemove()" :disabled="this.sels.length===0 && !(loginUser.role == 4)" >批量删除</el-button>
 			<el-pagination layout="prev, pager, next" @current-change="handleCurrentChange" :page-size="10" :total="total" style="float:right;">
 			</el-pagination>
 		</el-col>
@@ -63,11 +63,12 @@
 				<el-form-item label="用户名" prop="username">
 					<el-input v-model="editForm.username" auto-complete="off"></el-input>
 				</el-form-item>
-				<el-form-item label="权限" prop="role">
+				<el-form-item label="权限" prop="role" v-if="loginUser.role == 4">
 					<el-radio-group v-model="editForm.role">
 						<el-radio class="radio" :label="1">普通员工</el-radio>
-						<el-radio class="radio" :label="2">管理员</el-radio>
-						<el-radio class="radio" :label="3">超级管理员</el-radio>
+						<el-radio class="radio" :label="2">项目负责人</el-radio>
+						<el-radio class="radio" :label="3">部门负责人</el-radio>
+						<el-radio class="radio" :label="4">超级管理员</el-radio>
 					</el-radio-group>
 				</el-form-item>
 				<el-form-item label="密码" prop="password">
@@ -85,7 +86,7 @@
 				<el-form-item label="邮箱" prop="email">
 					<el-input v-model="editForm.email" auto-complete="off"></el-input>
 				</el-form-item>
-				<el-form-item label="部门名字" prop="deptId" >
+				<el-form-item label="部门" prop="deptId" v-if="loginUser.role == 4">
 					<el-select v-model="editForm.deptId" placeholder="请选择部门">
 						<el-option
 							v-for="dept in depts"
@@ -96,7 +97,7 @@
 					</el-select>
 				</el-form-item>
 
-				<el-form-item label="状态" prop="userStatus">
+				<el-form-item label="状态" prop="userStatus" v-if="loginUser.role == 4">
 					<el-radio-group v-model="editForm.userStatus">
 						<el-radio class="radio" :label="0">已离职</el-radio>
 						<el-radio class="radio" :label="1">正式员工</el-radio>
@@ -123,8 +124,9 @@
 				<el-form-item label="权限" prop="role">
 					<el-radio-group v-model="addForm.role">
 						<el-radio class="radio" :label="1">普通员工</el-radio>
-						<el-radio class="radio" :label="2">管理员</el-radio>
-						<el-radio class="radio" :label="3">超级管理员</el-radio>
+						<el-radio class="radio" :label="2">项目负责人</el-radio>
+						<el-radio class="radio" :label="3">部门负责人</el-radio>
+						<el-radio class="radio" :label="4">超级管理员</el-radio>
 					</el-radio-group>
 				</el-form-item>
 				<el-form-item label="密码" prop="password">
@@ -142,7 +144,7 @@
 				<el-form-item label="邮箱" prop="email">
 					<el-input v-model="addForm.email" auto-complete="off"></el-input>
 				</el-form-item>
-				<el-form-item label="部门名字" prop="deptId">
+				<el-form-item label="部门" prop="deptId">
 					<el-select v-model="addForm.deptId" placeholder="请选择部门">
 						<el-option
 							v-for="dept in depts"
@@ -274,9 +276,12 @@
 							return '普通员工'
 							break
 						case 2:
-							return '管理员'
+							return '项目负责人'
 							break
 						case 3:
+							return '部门负责人'
+							break
+						case 4:
 							return '超级管理员'
 							break
 					}

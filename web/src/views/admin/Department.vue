@@ -10,7 +10,7 @@
 					<el-button type="primary" v-on:click="getDepts()">查询</el-button>
 				</el-form-item>
 				<el-form-item>
-					<el-button type="primary" @click="handleAdd()">新增</el-button>
+					<el-button type="primary" @click="handleAdd()" v-if="loginUser.role == 4">新增</el-button>
 				</el-form-item>
 			</el-form>
 		</el-col>
@@ -28,8 +28,8 @@
 			<el-table-column label="操作" width="250">
 				<template slot-scope="scope">
 					<el-button size="small" @click="handleDU(scope.$index, scope.row)">查看员工</el-button>
-					<el-button size="small" @click="handleEdit(scope.$index, scope.row)">编辑</el-button>
-					<el-button type="danger" size="small" @click="handleDel(scope.$index, scope.row)">删除</el-button>
+					<el-button size="small" @click="handleEdit(scope.$index, scope.row)" :disabled="!( loginUser.role == 4)">编辑</el-button>
+					<el-button type="danger" size="small" @click="handleDel(scope.$index, scope.row)" :disabled="!(loginUser.role == 4)">删除</el-button>
 				</template>
 			</el-table-column>
 		</el-table>
@@ -291,13 +291,20 @@
 						this.$confirm('确认提交吗？', '提示', {}).then(() => {
 							let para = Object.assign({}, this.editForm);
 							this.$store.dispatch('dept_update',para).then(res=>{
-								this.$message({
-									message: '提交成功',
-									type: 'success'
-								})
-								this.$refs['editForm'].resetFields();
-								this.editFormVisible = false;
-								this.getDepts()
+								if(res.data == "修改部门成功"){
+									this.$message({
+										message: res.data,
+										type: 'success'
+									});
+									this.$refs['editForm'].resetFields();
+									this.editFormVisible = false;
+									this.getDepts()
+								}else{
+									this.$message({
+										message: res.data,
+										type: 'error'
+									});
+								}
 							})
 						});
 					}
@@ -312,7 +319,7 @@
 							this.$store.dispatch('dept_add',para).then(res=>{
 								if(res.data == "添加部门成功"){
 									this.$message({
-										message: '添加成功',
+										message: res.data,
 										type: 'success'
 									});
 									this.$refs['addForm'].resetFields();
@@ -320,7 +327,7 @@
 									this.getDepts()
 								}else{
 									this.$message({
-										message: '错误',
+										message: res.data,
 										type: 'error'
 									});
 								}

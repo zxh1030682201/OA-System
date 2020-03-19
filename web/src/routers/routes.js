@@ -101,22 +101,22 @@ let routes = [{
         children: [{
             path:'/anno',
             component:Announcement,
-            role: 2,
+            role: 3,
             name: '公告管理',
         },{
             path: '/user',
             component: User,
-            role: 3,
+            role: 2,
             name: '用户管理'
         },{
             path:'/dept',
             component: Department,
-            role: 3,
+            role: 2,
             name: '部门管理'
         },{
             path:'/team',
             component:Team,
-            role: 2,
+            role: 3,
             name: '项目管理'
         }]
     }

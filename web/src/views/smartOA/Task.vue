@@ -32,7 +32,7 @@
         </el-container>
       </el-tab-pane>
 
-      <el-tab-pane label="我发布的任务" v-if="this.loginUser.role >= 2">
+      <el-tab-pane label="我发布的任务" v-if="this.myTeams.length > 0">
         <el-container style="height:550px">
           <el-main>
             <el-table :data="myPublishs" highlight-current-row>
