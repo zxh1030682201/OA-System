@@ -100,6 +100,8 @@
         editCldVisible:false,
         loginUser:{},
         userClds:[],
+        myOrganized:[],
+        myMeeting:[],
         sels: [],//列表选中列
         newCld:{
           cldId:0,
@@ -120,6 +122,7 @@
     created(){
       this.getLoginUser()
       this.getUserClds()
+      this.getMyMeetings()
     },
     methods: {
       selsChange: function (sels) {
@@ -136,7 +139,18 @@
           this.userClds=res
         })
       },
-
+      getMyMeetings(){
+        this.$store.dispatch('meeting_queryByOrganizer',this.loginUser.userId).then(res=>{
+          this.myOrganized=res
+        })
+        let para={
+          member:this.loginUser.userId,
+          date:util.formatDate.format(new Date(),'yyyy-MM-dd hh:mm')
+        }
+        this.$store.dispatch('meeting_queryMeeting',para).then(res=>{
+          this.myMeeting=res
+        })
+      },
 
 
       // 点击日历事件
@@ -258,15 +272,21 @@
       
       // 处理日历现实内容
       dealMyDate(day) {
-            let len = this.userClds.length
             let res = ""
-            for(let i=0; i<len; i++){
-                if(this.userClds[i].cldDate == day) {
-                    res = this.userClds[i].cldContent
-                    break
-                }
+            let meeting = ""
+            for(let i=0; i< this.userClds.length; i++){
+              if(this.userClds[i].cldDate == day) {
+                  res = this.userClds[i].cldContent+"；"
+                  break
+              }
             }
-            return res
+            for(let j=0; j<this.myMeeting.length ; j++){
+              if(this.myMeeting[j].mtTime.indexOf(day) != -1) {
+                  meeting = "会议待参加"
+                  break
+              }
+            }
+            return res+meeting
         }
 
     }

@@ -156,7 +156,6 @@ export default {
         this.message=res.length
       })
     }
-
   },
   created(){
     var user = sessionStorage.getItem('user');

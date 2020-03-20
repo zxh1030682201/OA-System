@@ -155,16 +155,7 @@ export default {
             })
           }
         })
-      }
-      if(this.loginUser.role == 3){
-        this.$store.dispatch('user_queryByDept',this.loginUser.deptId).then(res=>{
-          this.myMeetingMembers=res
-          for(let member of res){
-            this.newMembers.push(member.userId)
-          }
-        })
-      }
-      if(this.loginUser.role == 4){
+      }else{
         this.$store.dispatch('user_queryAll').then(res=>{
           this.myMeetingMembers=res
           for(let member of res){
@@ -212,6 +203,17 @@ export default {
                 type: 'error'
               });
             }
+          }).then(()=>{
+            // 会议添加完后发送消息通知参与人
+            let param={
+              sender:this.loginUser.userId,
+              receiver:member,
+              msgTheme:"会议通知",
+              msgContent: `你有一场会议于 [${para.mtTime}] 在 [${para.mtPlace}] 进行，请及时参加`,
+              readed:0,
+              sendTime: util.formatDate.format(new Date(),'yyyy-MM-dd hh:mm:ss')
+            }
+            this.$store.dispatch('msg_add',param)
           })
         }
         this.addFormVisible = false;
