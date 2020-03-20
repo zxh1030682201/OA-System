@@ -94,6 +94,7 @@ export default {
   meeting_queryById:meeting.queryById,
   meeting_queryByOrganizer:meeting.queryByOrganizer,
   meeting_queryByMember:meeting.queryByMember,
+  meeting_queryMeeting:meeting.queryMeeting,
   meeting_add:meeting.add,
   meeting_update:meeting.update,
   meeting_delete:meeting.deleteD

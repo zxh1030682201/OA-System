@@ -50,6 +50,7 @@
 		<!-- 左侧导航栏 -->
       <aside class="menu-expanded">
         <el-menu
+          unique-opened
           :default-active="$route.path"
           class="el-menu-vertical-demo"
           router

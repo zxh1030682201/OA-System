@@ -26,6 +26,12 @@ public class MeetingController {
         return meetings;
     }
 
+    @GetMapping("/queryMeeting")
+    public List<Meeting> queryMeeting(@RequestParam("member")Integer member,@RequestParam("date")String date){
+        List<Meeting> meetings = meetingService.queryMeeting(member,date);
+        return meetings;
+    }
+
     @GetMapping("/queryById/{mtId}")
     public Meeting queryById(@PathVariable("mtId")int mtId){
         Meeting meeting = meetingService.queryById(mtId);

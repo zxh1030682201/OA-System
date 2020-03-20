@@ -10,6 +10,8 @@ export const queryByOrganizer = (organizer) => axios.setAxiosGetPromise(baseurl+
 
 export const queryByMember = (member) => axios.setAxiosGetPromise(baseurl+'queryByMember/'+member)
 
+export const queryMeeting = (options) => axios.setAxiosGetPromise(baseurl+'queryMeeting',options)
+
 export const add = (options)=>axios.setAxiosPostPromise(baseurl+'add',options)
 
 export const update = (options)=>axios.setAxiosPutPromise(baseurl+'update',options)

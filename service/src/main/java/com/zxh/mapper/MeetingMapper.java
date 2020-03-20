@@ -14,6 +14,8 @@ public interface MeetingMapper {
 
     List<Meeting> queryByMember(int member);
 
+    List<Meeting> queryMeeting(int member,String date);
+
     Meeting queryById(int mtId);
 
     Integer add(Meeting meeting);

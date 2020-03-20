@@ -20,6 +20,10 @@ public class MeetingService {
         return meetingMapper.queryByMember(member);
     }
 
+    public List<Meeting> queryMeeting(int member,String date){
+        return meetingMapper.queryMeeting(member,date);
+    }
+
     public Meeting queryById(int mtId){
         return meetingMapper.queryById(mtId);
     }

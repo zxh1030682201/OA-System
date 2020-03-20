@@ -34,7 +34,7 @@
 
       <el-tab-pane label="我发布的任务" v-if="this.myTeams.length > 0">
         <el-container style="height:550px">
-          <el-main>
+          <el-main style="height:530px">
             <el-table :data="myPublishs" highlight-current-row>
               <el-table-column prop="taskId" label="任务编号" width="100" sortable>
               </el-table-column>

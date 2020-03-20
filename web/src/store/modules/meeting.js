@@ -13,6 +13,9 @@ const actions = {
   async meeting_queryByMember({commit},options){
     return (await services.meeting_queryByMember(options)).data
   },
+  async meeting_queryMeeting({commit},options){
+    return (await services.meeting_queryMeeting(options)).data
+  },
   async meeting_queryByOrganizer({commit},options){
     return (await services.meeting_queryByOrganizer(options)).data
   },

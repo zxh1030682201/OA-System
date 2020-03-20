@@ -14,6 +14,11 @@
         where meeting.organizer = user.userId and meeting.member=#{member}
     </select>
 
+    <select id="queryMeeting" resultType="Meeting">
+        select meeting.*,user.name as organizerName from meeting,user
+        where meeting.organizer = user.userId and meeting.member=#{member} and meeting.mtTime >= #{date}
+    </select>
+
     <select id="queryById" resultType="Meeting">
         select * from meeting
         where meeting.mtId = #{mtId}
