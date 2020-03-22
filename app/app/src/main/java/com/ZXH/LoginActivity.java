@@ -10,6 +10,7 @@ import android.os.Looper;
 import android.os.StrictMode;
 import android.view.View;
 import android.widget.Button;
+import android.widget.CheckBox;
 import android.widget.EditText;
 import android.widget.Toast;
 
@@ -40,8 +41,20 @@ public class LoginActivity extends AppCompatActivity {
         Button btn_login=(Button)findViewById(R.id.login_button);
         final EditText username=(EditText)findViewById(R.id.username);
         final EditText password=(EditText)findViewById(R.id.password);
+        final CheckBox remember=(CheckBox)findViewById(R.id.rememberPwd);
 
         final HttpUtil httpUtil=new HttpUtil();
+
+        SharedPreferences pref = getSharedPreferences("loginUser",MODE_PRIVATE);
+        String un=pref.getString("username","");
+        String pwd=pref.getString("password","");
+        Boolean rb=pref.getBoolean("rememberPwd",false);
+
+        username.setText(un);
+        if(rb){
+            password.setText(pwd);
+            remember.setChecked(true);
+        }
 
         btn_login.setOnClickListener(new View.OnClickListener(){
             @Override
@@ -66,10 +79,12 @@ public class LoginActivity extends AppCompatActivity {
                             Toast.makeText(LoginActivity.this,"登陆成功",Toast.LENGTH_SHORT).show();
                             User user=gson.fromJson(result,User.class);
                             SharedPreferences.Editor editor = getSharedPreferences("loginUser",MODE_PRIVATE).edit();
+                            editor.putBoolean("rememberPwd",remember.isChecked());
                             editor.putString("name",user.getName());
                             editor.putString("username",user.getUsername());
                             editor.putString("password",user.getPassword());
                             editor.putInt("deptId",user.getDeptId());
+                            editor.putString("deptName",user.getDeptName());
                             editor.apply();
                             Intent intent = new Intent(LoginActivity.this,MainActivity.class);
                             startActivity(intent);
