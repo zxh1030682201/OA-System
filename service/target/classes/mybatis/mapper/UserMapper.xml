@@ -18,7 +18,7 @@
     </select>
 
     <select id="queryByUN" resultType="User">
-        select * from user where username=#{username}
+        select * from user,department where username=#{username} and department.deptId=user.deptId
     </select>
 
     <select id="queryByUsername" resultType="User">
