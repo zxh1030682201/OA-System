@@ -14,8 +14,8 @@ mybatis:
 server:
   port: 7000
 
-#logging:
-#  level:
-#    com:
-#      zxh:
-#        mapper: debug
+logging:
+  level:
+    com:
+      zxh:
+        mapper: debug

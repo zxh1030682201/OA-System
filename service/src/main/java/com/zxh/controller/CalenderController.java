@@ -1,5 +1,6 @@
 package com.zxh.controller;
 
+import com.google.gson.Gson;
 import com.zxh.pojo.Calender;
 import com.zxh.service.CalenderService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -14,26 +15,28 @@ public class CalenderController {
     @Autowired
     private CalenderService calenderService;
 
+    private Gson gson=new Gson();
+
     @GetMapping("/queryAll")
-    public List<Calender> queryAll(){
+    public String queryAll(){
         List<Calender> calenders=calenderService.queryAll();
-        return calenders;
+        return gson.toJson(calenders);
     }
 
     @GetMapping("/queryByUser/{userId}")
-    public List<Calender> queryByUser(@PathVariable("userId") int userId){
-        return calenderService.queryByUser(userId);
+    public String queryByUser(@PathVariable("userId") int userId){
+        return gson.toJson(calenderService.queryByUser(userId));
     }
 
     @GetMapping("/queryById/{cldId}")
-    public Calender queryById(@PathVariable("cldId") int cldId){
-        return calenderService.queryById(cldId);
+    public String queryById(@PathVariable("cldId") int cldId){
+        return gson.toJson(calenderService.queryById(cldId));
     }
 
     @GetMapping("/queryByUD")
-    public Calender queryByUD(@RequestParam("cldUser") int cldUser,@RequestParam("cldDate") String cldDate){
+    public String queryByUD(@RequestParam("cldUser") int cldUser,@RequestParam("cldDate") String cldDate){
         System.out.println(cldUser+"   "+cldDate);
-        return calenderService.queryByUD(cldUser,cldDate);
+        return gson.toJson(calenderService.queryByUD(cldUser,cldDate));
     }
 
 

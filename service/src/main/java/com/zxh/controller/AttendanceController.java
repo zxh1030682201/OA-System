@@ -1,5 +1,6 @@
 package com.zxh.controller;
 
+import com.google.gson.Gson;
 import com.zxh.pojo.Attendance;
 import com.zxh.service.AttendanceService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -14,28 +15,30 @@ public class AttendanceController {
     @Autowired
     private AttendanceService attendanceService;
 
+    private Gson gson=new Gson();
+
     @GetMapping("/queryAll")
-    public List<Attendance> queryAll(){
+    public String queryAll(){
         List<Attendance> attendances= attendanceService.queryAll();
-        return attendances;
+        return gson.toJson(attendances);
     }
 
     @GetMapping("/queryById/{atdId}")
-    public Attendance queryById(@PathVariable("atdId") int atdId){
+    public String queryById(@PathVariable("atdId") int atdId){
         Attendance attendance= attendanceService.queryById(atdId);
-        return attendance;
+        return gson.toJson(attendance);
     }
 
     @GetMapping("/queryByUser/{atdUser}")
-    public List<Attendance> queryByUser(@PathVariable("atdUser") int atdUser){
+    public String queryByUser(@PathVariable("atdUser") int atdUser){
         List<Attendance> attendances= attendanceService.queryByUser(atdUser);
-        return attendances;
+        return gson.toJson(attendances);
     }
 
     @GetMapping("/queryByUD")
-    public List<Attendance> queryByUD(@RequestParam("userId")int atdUser,@RequestParam("date")String date){
+    public String queryByUD(@RequestParam("userId")int atdUser,@RequestParam("date")String date){
         List<Attendance> attendances= attendanceService.queryByUD(atdUser,date);
-        return attendances;
+        return gson.toJson(attendances);
     }
 
     @PostMapping("/add")

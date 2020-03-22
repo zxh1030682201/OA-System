@@ -1,5 +1,6 @@
 package com.zxh.controller;
 
+import com.google.gson.Gson;
 import com.zxh.pojo.Meeting;
 import com.zxh.service.MeetingService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -14,28 +15,30 @@ public class MeetingController {
     @Autowired
     private MeetingService meetingService;
 
+    private Gson gson=new Gson();
+
     @GetMapping("/queryByOrganizer/{organizer}")
-    public List<Meeting> queryByOrganizer(@PathVariable("organizer")int organizer){
+    public String queryByOrganizer(@PathVariable("organizer")int organizer){
         List<Meeting> meetings = meetingService.queryByOrganizer(organizer);
-        return meetings;
+        return gson.toJson(meetings);
     }
 
     @GetMapping("/queryByMember/{member}")
-    public List<Meeting> queryByMember(@PathVariable("member")int member){
+    public String queryByMember(@PathVariable("member")int member){
         List<Meeting> meetings = meetingService.queryByMember(member);
-        return meetings;
+        return gson.toJson(meetings);
     }
 
     @GetMapping("/queryMeeting")
-    public List<Meeting> queryMeeting(@RequestParam("member")Integer member,@RequestParam("date")String date){
+    public String queryMeeting(@RequestParam("member")Integer member,@RequestParam("date")String date){
         List<Meeting> meetings = meetingService.queryMeeting(member,date);
-        return meetings;
+        return gson.toJson(meetings);
     }
 
     @GetMapping("/queryById/{mtId}")
-    public Meeting queryById(@PathVariable("mtId")int mtId){
+    public String queryById(@PathVariable("mtId")int mtId){
         Meeting meeting = meetingService.queryById(mtId);
-        return meeting;
+        return gson.toJson(meeting);
     }
 
 

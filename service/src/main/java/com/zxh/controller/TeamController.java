@@ -1,5 +1,6 @@
 package com.zxh.controller;
 
+import com.google.gson.Gson;
 import com.zxh.pojo.Team;
 import com.zxh.service.TeamService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -14,19 +15,21 @@ public class TeamController {
     @Autowired
     private TeamService teamService;
 
+    private Gson gson=new Gson();
+
     @GetMapping("/queryAll")
-    public List<Team> queryAll(){
-        return teamService.queryAll();
+    public String queryAll(){
+        return gson.toJson(teamService.queryAll());
     }
 
     @GetMapping("/queryByLeader/{teamLeader}")
-    public List<Team> queryByLeader(@PathVariable("teamLeader") Integer teamLeader){
-        return teamService.queryByLeader(teamLeader);
+    public String queryByLeader(@PathVariable("teamLeader") Integer teamLeader){
+        return gson.toJson(teamService.queryByLeader(teamLeader));
     }
 
     @GetMapping("/queryById/{teamId}")
-    public Team queryById(@PathVariable("teamId") Integer teamId){
-        return teamService.queryById(teamId);
+    public String queryById(@PathVariable("teamId") Integer teamId){
+        return gson.toJson(teamService.queryById(teamId));
     }
 
     @PostMapping("/add")

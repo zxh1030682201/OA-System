@@ -1,5 +1,6 @@
 package com.zxh.controller;
 
+import com.google.gson.Gson;
 import com.zxh.pojo.Announcement;
 import com.zxh.service.AnnouncementService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -15,16 +16,18 @@ public class AnnouncementController {
     @Autowired
     private AnnouncementService announcementService;
 
+    private Gson gson=new Gson();
+
     @GetMapping("/queryAll")
-    public List<Announcement> queryAll(){
+    public String queryAll(){
         List<Announcement> announcementList = announcementService.queryAll();
-        return announcementList;
+        return gson.toJson(announcementList);
     }
 
     @GetMapping("/queryById/{annoId}")
-    public Announcement queryUserById(@PathVariable("annoId") Integer annoId){
+    public String queryUserById(@PathVariable("annoId") Integer annoId){
         Announcement announcement = announcementService.queryById(annoId);
-        return announcement;
+        return gson.toJson(announcement);
     }
 
     @PostMapping("/add")

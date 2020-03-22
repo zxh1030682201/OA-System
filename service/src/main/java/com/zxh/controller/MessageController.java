@@ -1,5 +1,6 @@
 package com.zxh.controller;
 
+import com.google.gson.Gson;
 import com.zxh.pojo.Message;
 import com.zxh.service.MessageService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -15,30 +16,32 @@ public class MessageController {
     @Autowired
     private MessageService messageService;
 
+    private Gson gson=new Gson();
+
     @GetMapping("/queryAll")
-    public List<Message> queryAll(){
-        return messageService.queryAll();
+    public String queryAll(){
+        return gson.toJson(messageService.queryAll());
     }
 
     @GetMapping("/queryByS/{userId}")
-    public List<Message> queryByS(@PathVariable("userId") int userId){
-        return messageService.queryByS(userId);
+    public String queryByS(@PathVariable("userId") int userId){
+        return gson.toJson(messageService.queryByS(userId));
     }
 
     @GetMapping("/queryByRU/{userId}")
-    public List<Message> queryByRU(@PathVariable("userId") int userId){
-        return messageService.queryByRU(userId);
+    public String queryByRU(@PathVariable("userId") int userId){
+        return gson.toJson(messageService.queryByRU(userId));
     }
 
     @GetMapping("/queryByRR/{userId}")
-    public List<Message> queryByRR(@PathVariable("userId") int userId){
-        return messageService.queryByRR(userId);
+    public String queryByRR(@PathVariable("userId") int userId){
+        return gson.toJson(messageService.queryByRR(userId));
     }
 
 
     @GetMapping("/queryById/{msgId}")
-    public Message queryById(@PathVariable("msgId") Integer msgId){
-        return messageService.queryById(msgId);
+    public String queryById(@PathVariable("msgId") Integer msgId){
+        return gson.toJson(messageService.queryById(msgId));
     }
 
     @PostMapping("/add")

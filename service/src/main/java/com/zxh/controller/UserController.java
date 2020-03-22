@@ -1,5 +1,6 @@
 package com.zxh.controller;
 
+import com.google.gson.Gson;
 import com.zxh.pojo.User;
 import com.zxh.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -15,49 +16,53 @@ public class UserController {
     @Autowired
     private UserService userService;
 
+    private Gson gson=new Gson();
+
     @PostMapping("/login")
-    public User login(@RequestBody Map<String,Object> reqMap){
+    public String login(@RequestBody Map<String,Object> reqMap){
         String username=reqMap.get("username").toString();
         String password=reqMap.get("password").toString();
         User user=userService.queryByUN(username);
-        if(user==null){
-            return null;
+        if(user == null){
+            return "用户不存在";
         }
         if(user.getPassword().equals(password) && (user.getUserStatus() != 0)){
-            return user;
+
+            return gson.toJson(user);
+        }else{
+            return "密码错误";
         }
-        return null;
     }
 
     @GetMapping("/queryAll")
-    public List<User> queryAll(){
+    public String queryAll(){
         List<User> userList = userService.queryAll();
-        return userList;
+        return gson.toJson(userList);
     }
 
     @GetMapping("/queryPage")
-    public List<User> queryPage(@RequestParam("page") int pageIndex,@RequestParam("name") String name){
+    public String queryPage(@RequestParam("page") int pageIndex,@RequestParam("name") String name){
         List<User> userList = userService.queryPage(pageIndex,name);
-        return userList;
+        return gson.toJson(userList);
     }
 
 
     @GetMapping("/queryById/{userId}")
-    public User queryById(@PathVariable("userId") Integer userId){
+    public String queryById(@PathVariable("userId") Integer userId){
         User user = userService.queryById(userId);
-        return user;
+        return gson.toJson(user);
     }
 
     @GetMapping("/queryByName")
-    public List<User> queryByName(@RequestParam("name") String name){
+    public String queryByName(@RequestParam("name") String name){
         List<User> userList = userService.queryByName(name);
-        return userList;
+        return gson.toJson(userList);
     }
 
     @GetMapping("/queryByDept/{deptId}")
-    public List<User> queryByDept(@PathVariable("deptId") Integer deptId){
+    public String queryByDept(@PathVariable("deptId") Integer deptId){
         List<User> userList = userService.queryByDept(deptId);
-        return userList;
+        return gson.toJson(userList);
     }
 
     @PostMapping("/add")

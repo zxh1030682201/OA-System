@@ -1,5 +1,6 @@
 package com.zxh.controller;
 
+import com.google.gson.Gson;
 import com.zxh.pojo.Task;
 import com.zxh.service.TaskService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -14,23 +15,25 @@ public class TaskController {
     @Autowired
     private TaskService taskService;
 
+    private Gson gson=new Gson();
+
     @GetMapping("/queryAll")
-    public List<Task> queryAll(){
-        return taskService.queryAll();
+    public String queryAll(){
+        return gson.toJson(taskService.queryAll());
     }
 
     @GetMapping("/queryByUser/{taskUser}")
-    public List<Task> queryByUser(@PathVariable("taskUser") Integer taskUser){
-        return taskService.queryByTaskUser(taskUser);
+    public String queryByUser(@PathVariable("taskUser") Integer taskUser){
+        return gson.toJson(taskService.queryByTaskUser(taskUser));
     }
     @GetMapping("/queryByPublisher/{publisher}")
-    public List<Task> queryByPublisher(@PathVariable("publisher") Integer publisher){
-        return taskService.queryByPublisher(publisher);
+    public String queryByPublisher(@PathVariable("publisher") Integer publisher){
+        return gson.toJson(taskService.queryByPublisher(publisher));
     }
 
     @GetMapping("/queryById/{taskId}")
-    public Task queryById(@PathVariable("taskId") Integer taskId){
-        return taskService.queryById(taskId);
+    public String queryById(@PathVariable("taskId") Integer taskId){
+        return gson.toJson(taskService.queryById(taskId));
     }
 
     @PostMapping("/add")

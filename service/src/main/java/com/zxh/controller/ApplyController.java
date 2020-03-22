@@ -1,5 +1,6 @@
 package com.zxh.controller;
 
+import com.google.gson.Gson;
 import com.zxh.pojo.Apply;
 import com.zxh.pojo.User;
 import com.zxh.service.ApplyService;
@@ -16,28 +17,30 @@ public class ApplyController {
     @Autowired
     private ApplyService applyService;
 
+    private Gson gson=new Gson();
+
     @GetMapping("/queryAll")
-    public List<Apply> queryAll(){
+    public String queryAll(){
         List<Apply> applies = applyService.queryAll();
-        return applies;
+        return gson.toJson(applies);
     }
 
     @GetMapping("/queryById/{applyId}")
-    public Apply queryById(@PathVariable("applyId") Integer applyId){
+    public String queryById(@PathVariable("applyId") Integer applyId){
         Apply apply = applyService.queryById(applyId);
-        return apply;
+        return gson.toJson(apply);
     }
 
     @GetMapping("/queryByFrom/{applyUser}")
-    public List<Apply> queryByFrom(@PathVariable("applyUser") Integer applyUser){
+    public String queryByFrom(@PathVariable("applyUser") Integer applyUser){
         List<Apply> applies = applyService.queryByFrom(applyUser);
-        return applies;
+        return gson.toJson(applies);
     }
 
     @GetMapping("/queryByTo/{approvalUser}")
-    public List<Apply> queryByTo(@PathVariable("approvalUser") Integer approvalUser){
+    public String queryByTo(@PathVariable("approvalUser") Integer approvalUser){
         List<Apply> applies = applyService.queryByTo(approvalUser);
-        return applies;
+        return gson.toJson(applies);
     }
 
     @PostMapping("/add")

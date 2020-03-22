@@ -1,5 +1,6 @@
 package com.zxh.controller;
 
+import com.google.gson.Gson;
 import com.zxh.pojo.Department;
 import com.zxh.service.DepartmentService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -14,22 +15,24 @@ public class DepartmentController {
     @Autowired
     private DepartmentService departmentService;
 
+    private Gson gson=new Gson();
+
     @GetMapping("/queryAll")
-    public List<Department> queryAllDept(){
+    public String queryAllDept(){
         List<Department> departmentList=departmentService.queryAll();
-        return departmentList;
+        return gson.toJson(departmentList);
     }
 
     @GetMapping("/queryByName")
-    public List<Department> queryByName(@RequestParam("deptName") String deptName){
+    public String queryByName(@RequestParam("deptName") String deptName){
         List<Department> departmentList=departmentService.queryByName(deptName);
-        return departmentList;
+        return gson.toJson(departmentList);
     }
 
     @GetMapping("/queryById/{deptId}")
-    public Department queryDeptById(@PathVariable("deptId") Integer deptId){
+    public String queryDeptById(@PathVariable("deptId") Integer deptId){
         Department department = departmentService.queryById(deptId);
-        return department;
+        return gson.toJson(department);
     }
 
     @PostMapping("/add")
