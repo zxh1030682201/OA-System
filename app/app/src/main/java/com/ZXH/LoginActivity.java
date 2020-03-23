@@ -1,31 +1,24 @@
-package com.ZXH;
-
-import androidx.appcompat.app.AppCompatActivity;
+package com.zxh;
 
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
-
 import android.os.Looper;
-import android.os.StrictMode;
 import android.view.View;
 import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.EditText;
 import android.widget.Toast;
 
-import com.ZXH.Entity.User;
-import com.ZXH.Util.HttpUtil;
+import androidx.appcompat.app.AppCompatActivity;
+
+import com.zxh.Entity.User;
 import com.google.gson.Gson;
+import com.zxh.Util.HttpUtil;
 
 import java.io.IOException;
 
 import okhttp3.Call;
-import okhttp3.FormBody;
-import okhttp3.MediaType;
-import okhttp3.OkHttpClient;
-import okhttp3.Request;
-import okhttp3.RequestBody;
 import okhttp3.Response;
 
 

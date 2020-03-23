@@ -1,4 +1,4 @@
-package com.ZXH;
+package com.zxh;
 
 import org.junit.Test;
 

@@ -1,2 +1,2 @@
-rootProject.name='OASYS'
+rootProject.name='app'
 include ':app'

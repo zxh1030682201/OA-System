@@ -1,4 +1,4 @@
-package com.ZXH.Entity;
+package com.zxh.Entity;
 
 
 import lombok.AllArgsConstructor;

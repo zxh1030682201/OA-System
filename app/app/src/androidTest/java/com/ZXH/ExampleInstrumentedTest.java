@@ -1,4 +1,4 @@
-package com.ZXH;
+package com.zxh;
 
 import android.content.Context;
 
@@ -22,6 +22,6 @@ public class ExampleInstrumentedTest {
         // Context of the app under test.
         Context appContext = InstrumentationRegistry.getInstrumentation().getTargetContext();
 
-        assertEquals("com.ZXH", appContext.getPackageName());
+        assertEquals("com.zxh", appContext.getPackageName());
     }
 }
