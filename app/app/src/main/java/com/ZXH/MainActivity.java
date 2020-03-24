@@ -2,6 +2,7 @@ package com.zxh;
 
 import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.view.LayoutInflater;
 import android.view.View;
 import android.view.Menu;
 import android.widget.TextView;
@@ -33,10 +34,20 @@ public class MainActivity extends AppCompatActivity {
         DrawerLayout drawer = findViewById(R.id.drawer_layout);
         NavigationView navigationView = findViewById(R.id.nav_view);
 
+        View headerLayout = navigationView.inflateHeaderView(R.layout.nav_header_main);
+        TextView name = headerLayout.findViewById(R.id.selfName);
+        TextView email=headerLayout.findViewById(R.id.selfEmail);
+
+        SharedPreferences pref = getSharedPreferences("loginUser",MODE_PRIVATE);
+        name.setText("Hello,"+pref.getString("name",""));
+        email.setText(pref.getString("email",""));
+
+
         mAppBarConfiguration = new AppBarConfiguration.Builder(
                 R.id.nav_message,R.id.nav_meeting, R.id.nav_attendance, R.id.nav_apply)
                 .setDrawerLayout(drawer)
                 .build();
+
         NavController navController = Navigation.findNavController(this, R.id.nav_host_fragment);
         NavigationUI.setupActionBarWithNavController(this, navController, mAppBarConfiguration);
         NavigationUI.setupWithNavController(navigationView, navController);

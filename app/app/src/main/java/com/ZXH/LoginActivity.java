@@ -72,9 +72,11 @@ public class LoginActivity extends AppCompatActivity {
                             Looper.prepare();
                             Toast.makeText(LoginActivity.this,"登陆成功",Toast.LENGTH_SHORT).show();
                             User user=gson.fromJson(result,User.class);
+
                             SharedPreferences.Editor editor = getSharedPreferences("loginUser",MODE_PRIVATE).edit();
                             editor.putBoolean("rememberPwd",remember.isChecked());
                             editor.putString("name",user.getName());
+                            editor.putString("email",user.getEmail());
                             editor.putString("username",user.getUsername());
                             editor.putString("password",user.getPassword());
                             editor.putInt("deptId",user.getDeptId());
