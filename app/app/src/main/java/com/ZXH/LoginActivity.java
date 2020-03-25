@@ -8,7 +8,6 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.EditText;
-import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
@@ -26,6 +25,7 @@ import okhttp3.Response;
 public class LoginActivity extends AppCompatActivity {
 
     private Gson gson = new Gson();
+    private HttpUtil httpUtil = new HttpUtil();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -37,7 +37,7 @@ public class LoginActivity extends AppCompatActivity {
         final EditText password=(EditText)findViewById(R.id.password);
         final CheckBox remember=(CheckBox)findViewById(R.id.rememberPwd);
 
-        final HttpUtil httpUtil=new HttpUtil();
+
 
         SharedPreferences pref = getSharedPreferences("loginUser",MODE_PRIVATE);
         String un=pref.getString("username","");
@@ -54,7 +54,6 @@ public class LoginActivity extends AppCompatActivity {
             @Override
             public void onClick(View v){
                 String json="{\"username\":\""+username.getText()+"\",\"password\":\""+password.getText()+"\"}";
-                System.out.println(json);
                 httpUtil.doPost("http://10.0.2.2:7000/user/login",json,new okhttp3.Callback(){
                     @Override
                     public void onResponse(Call call, Response response) throws IOException {
@@ -75,6 +74,7 @@ public class LoginActivity extends AppCompatActivity {
 
                             SharedPreferences.Editor editor = getSharedPreferences("loginUser",MODE_PRIVATE).edit();
                             editor.putBoolean("rememberPwd",remember.isChecked());
+                            editor.putInt("userId",user.getUserId());
                             editor.putString("name",user.getName());
                             editor.putString("email",user.getEmail());
                             editor.putString("username",user.getUsername());

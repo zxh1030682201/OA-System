@@ -28,6 +28,13 @@ public class MessageService {
         return  messageMapper.queryByRR(receiver);
     }
 
+    public String msgRead(int msgId){
+        Message message=messageMapper.queryById(msgId);
+        message.setReaded(1);
+        messageMapper.update(message);
+        return "已读成功";
+    }
+
     public Message queryById(int msgId){
         return messageMapper.queryById(msgId);
     }

@@ -42,15 +42,15 @@ public class MainActivity extends AppCompatActivity {
 
         View headerLayout = navigationView.inflateHeaderView(R.layout.nav_header_main);
         TextView name = headerLayout.findViewById(R.id.selfName);
-        TextView email=headerLayout.findViewById(R.id.selfEmail);
+        TextView username=headerLayout.findViewById(R.id.selfUsername);
 
         pref = getSharedPreferences("loginUser",MODE_PRIVATE);
-        name.setText("Hello,"+pref.getString("name",""));
-        email.setText(pref.getString("email",""));
+        name.setText("你好,"+pref.getString("name",""));
+        username.setText("Hello,"+pref.getString("username",""));
 
 
         mAppBarConfiguration = new AppBarConfiguration.Builder(
-                R.id.nav_message,R.id.nav_meeting, R.id.nav_attendance, R.id.nav_apply)
+                R.id.nav_message, R.id.nav_attendance, R.id.nav_apply)
                 .setDrawerLayout(drawer)
                 .build();
 

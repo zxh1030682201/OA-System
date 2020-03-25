@@ -38,6 +38,10 @@ public class MessageController {
         return gson.toJson(messageService.queryByRR(userId));
     }
 
+    @GetMapping("/msgRead/{msgId}")
+    public String msgRead(@PathVariable("msgId") int msgId){
+        return messageService.msgRead(msgId);
+    }
 
     @GetMapping("/queryById/{msgId}")
     public String queryById(@PathVariable("msgId") Integer msgId){
