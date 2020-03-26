@@ -15,27 +15,36 @@
         android:orientation="vertical">
 
         <TextView
-            android:id="@+id/textView6"
+            android:id="@+id/checkTotal"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:gravity="center"
             android:layout_weight="1"
+            android:textSize="20sp"
+            android:textColor="#000"
+            android:background="#FFF"
             android:text="TextView" />
 
         <TextView
-            android:id="@+id/textView5"
+            android:id="@+id/lateTotal"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:gravity="center"
+            android:textSize="20sp"
             android:layout_weight="1"
+            android:textColor="#F00"
+            android:background="#FFF"
             android:text="TextView" />
 
         <TextView
-            android:id="@+id/textView7"
+            android:id="@+id/earlyTotal"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:gravity="center"
+            android:textSize="20sp"
             android:layout_weight="1"
+            android:textColor="#FF9900"
+            android:background="#FFF"
             android:text="TextView" />
     </LinearLayout>
 
@@ -74,51 +83,29 @@
             android:layout_weight="1"
             android:orientation="horizontal">
 
-            <LinearLayout
+
+            <TextView
+                android:id="@+id/checkInTip"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
+                android:gravity="center"
                 android:layout_weight="1"
-                android:orientation="vertical">
+                android:textSize="16sp"
+                android:textColor="#000"
+                android:background="#FFF"
+                android:text="TextView" />
 
-                <TextView
-                    android:id="@+id/textView"
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:gravity="center"
-                    android:layout_weight="1"
-                    android:text="TextView" />
 
-                <TextView
-                    android:id="@+id/textView2"
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:gravity="center"
-                    android:layout_weight="1"
-                    android:text="TextView" />
-            </LinearLayout>
-
-            <LinearLayout
+            <TextView
+                android:id="@+id/checkOutTip"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
+                android:gravity="center"
                 android:layout_weight="1"
-                android:orientation="vertical">
-
-                <TextView
-                    android:id="@+id/textView3"
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:gravity="center"
-                    android:layout_weight="1"
-                    android:text="TextView" />
-
-                <TextView
-                    android:id="@+id/textView4"
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:gravity="center"
-                    android:layout_weight="1"
-                    android:text="TextView" />
-            </LinearLayout>
+                android:textSize="16sp"
+                android:textColor="#000"
+                android:background="#FFF"
+                android:text="TextView" />
 
         </LinearLayout>
 

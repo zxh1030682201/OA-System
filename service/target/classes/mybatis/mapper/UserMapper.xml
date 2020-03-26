@@ -6,7 +6,7 @@
 <mapper namespace="com.zxh.mapper.UserMapper">
 
     <select id="queryAll" resultType="User">
-        select * from user
+        select * from user,department where user.deptId=department.deptId
     </select>
 
     <select id="queryById" resultType="User">

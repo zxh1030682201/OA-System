@@ -33,6 +33,27 @@ public class AttendanceService {
         return attendances;
     }
 
+    public String checkIn(int userId,String date,String checkInTime){
+        List<Attendance> atds=queryByUD(userId,date);
+        if(atds.size() != 0){
+            return "今日已签到，请勿重复签到";
+        }else{
+            attendanceMapper.add(new Attendance(0,userId,date,checkInTime,""));
+            return "签到成功";
+        }
+    }
+
+    public String checkOut(int userId,String date,String checkOutTime){
+        List<Attendance> atds=queryByUD(userId,date);
+        if(atds.size() ==0){
+            return "请先签到";
+        }else {
+            atds.get(0).setCheckOutTime(checkOutTime);
+            attendanceMapper.update(atds.get(0));
+            return "签退成功";
+        }
+    }
+
     public String add(Attendance attendance){
         attendanceMapper.add(attendance);
         return "新增考勤成功";

@@ -41,6 +41,18 @@ public class AttendanceController {
         return gson.toJson(attendances);
     }
 
+    @GetMapping("/checkIn")
+    public String checkIn(@RequestParam("userId")int atdUser,@RequestParam("date")String date,@RequestParam("checkInTime")String checkInTime){
+        return attendanceService.checkIn(atdUser,date,checkInTime);
+
+    }
+
+    @GetMapping("/checkOut")
+    public String checkOut(@RequestParam("userId")int atdUser,@RequestParam("date")String date,@RequestParam("checkOutTime")String checkOutTime){
+        return attendanceService.checkOut(atdUser,date,checkOutTime);
+    }
+
+
     @PostMapping("/add")
     public String add(@RequestBody Map<String,Object> reqMap){
         return attendanceService.add(getArd(reqMap));

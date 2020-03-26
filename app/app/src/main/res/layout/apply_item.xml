@@ -4,7 +4,7 @@
     android:layout_height="wrap_content">
 
     <TextView
-        android:id="@+id/msg_msgTheme"
+        android:id="@+id/apply_type"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_margin="5dp"
@@ -14,7 +14,7 @@
         android:layout_marginLeft="10px"/>
 
     <TextView
-        android:id="@+id/msg_senderName"
+        android:id="@+id/apply_applyStatus"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_margin="5dp"
@@ -22,12 +22,19 @@
         android:layout_weight="1" />
 
     <TextView
-        android:id="@+id/msg_sendTime"
+        android:id="@+id/apply_startTime"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_margin="5dp"
         android:layout_gravity="center"
         android:layout_weight="1" />
 
+    <TextView
+        android:id="@+id/apply_endTime"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_margin="5dp"
+        android:layout_gravity="center"
+        android:layout_weight="1" />
 
 </LinearLayout>
