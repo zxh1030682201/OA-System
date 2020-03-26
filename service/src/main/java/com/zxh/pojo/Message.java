@@ -12,6 +12,7 @@ public class Message {
     private int sender;
     private String senderName;
     private int receiver;
+    private String receiverName;
     private String sendTime;
     private String msgTheme;
     private String msgContent;

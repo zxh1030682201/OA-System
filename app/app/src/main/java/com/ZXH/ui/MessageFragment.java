@@ -16,6 +16,7 @@ import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.ListView;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.google.gson.Gson;
@@ -42,9 +43,8 @@ import okhttp3.Response;
 public class MessageFragment extends Fragment {
 
     private HttpUtil httpUtil = new HttpUtil();
-    private List<Message> unreadMsg = new ArrayList<>();
-    private List<Message> myReadMsg = new ArrayList<>();
-    private List<Message> mySendMsg = new ArrayList<>();
+    private List<Message> lists = new ArrayList<>();
+    private Integer mark = 0;
 
 
     @Override
@@ -52,35 +52,34 @@ public class MessageFragment extends Fragment {
         return inflater.inflate(R.layout.fragment_message, container, false);
     }
 
+    @SneakyThrows
     @Override
-    public void onActivityCreated(Bundle savedInstanceState) {
-        super.onActivityCreated(savedInstanceState);
+    public void onStart() {
+        super.onStart();
 
         final Button myRead = getActivity().findViewById(R.id.myRead);
-        Button mySend = getActivity().findViewById(R.id.mySend);
+        final Button mySend = getActivity().findViewById(R.id.mySend);
         final ListView msgList = getActivity().findViewById(R.id.msgList);
+        final TextView sr=(TextView)getActivity().findViewById(R.id.msgSR);
+        final SharedPreferences pref = getActivity().getSharedPreferences("loginUser", 0);
+        final Integer id=pref.getInt("userId",0);
+        final Intent intent=new Intent(getActivity(), MessageDetail.class);
+        lists= (List<Message>) stringToArray(httpUtil.doGet("http://10.0.2.2:7000/msg/queryByRU/"+id),Message[].class);
 
-        SharedPreferences pref = getActivity().getSharedPreferences("loginUser", 0);
-        Integer id=pref.getInt("userId",0);
 
-        try {
-            unreadMsg= (List<Message>) stringToArray(httpUtil.doGet("http://10.0.2.2:7000/msg/queryByRU/"+id),Message[].class);
-            myReadMsg= (List<Message>) stringToArray(httpUtil.doGet("http://10.0.2.2:7000/msg/queryByRR/"+id),Message[].class);
-            mySendMsg= (List<Message>) stringToArray(httpUtil.doGet("http://10.0.2.2:7000/msg/queryByS/"+id),Message[].class);
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-
-        MessageAdapter adapter = new MessageAdapter(getActivity(), R.layout.message_item, unreadMsg);
+        MessageAdapter adapter = new MessageAdapter(getActivity(), R.layout.message_item, lists);
         msgList.setAdapter(adapter);
 
+        myRead.setText("查看已读消息");
+        sr.setText("发送人");
+        mySend.setText("我发送的");
+        myRead.setVisibility(View.VISIBLE);
 
 //      列表点击事件
         msgList.setOnItemClickListener(new AdapterView.OnItemClickListener(){
             @Override
             public void onItemClick(AdapterView<?> parent,View view,int position,long id) {
-                Message message=unreadMsg.get(position);
-                Intent intent=new Intent(getActivity(), MessageDetail.class);
+                Message message=lists.get(position);
                 intent.putExtra("Message",message);
                 startActivity(intent);
             }
@@ -88,15 +87,18 @@ public class MessageFragment extends Fragment {
 
 //      按钮点击事件
         myRead.setOnClickListener(new View.OnClickListener() {
+            @SneakyThrows
             @Override
             public void onClick(View v) {
-                if(myRead.getText().equals("已读消息")){
-                    myRead.setText("未读消息");
-                    MessageAdapter adapter = new MessageAdapter(getActivity(), R.layout.message_item, myReadMsg);
+                if(myRead.getText().equals("查看已读消息")){
+                    myRead.setText("查看未读消息");
+                    lists= (List<Message>) stringToArray(httpUtil.doGet("http://10.0.2.2:7000/msg/queryByRR/"+id),Message[].class);
+                    MessageAdapter adapter = new MessageAdapter(getActivity(), R.layout.message_item, lists);
                     msgList.setAdapter(adapter);
                 }else{
-                    myRead.setText("已读消息");
-                    MessageAdapter adapter = new MessageAdapter(getActivity(), R.layout.message_item, unreadMsg);
+                    myRead.setText("查看已读消息");
+                    lists= (List<Message>) stringToArray(httpUtil.doGet("http://10.0.2.2:7000/msg/queryByRU/"+id),Message[].class);
+                    MessageAdapter adapter = new MessageAdapter(getActivity(), R.layout.message_item, lists);
                     msgList.setAdapter(adapter);
                 }
 
@@ -105,8 +107,25 @@ public class MessageFragment extends Fragment {
 
 //      按钮点击事件
         mySend.setOnClickListener(new View.OnClickListener() {
+            @SneakyThrows
             @Override
             public void onClick(View v) {
+                if(mySend.getText().equals("返回")){
+                    lists= (List<Message>) stringToArray(httpUtil.doGet("http://10.0.2.2:7000/msg/queryByRU/"+id),Message[].class);
+                    sr.setText("发送人");
+                    mySend.setText("我发送的");
+                    myRead.setVisibility(View.VISIBLE);
+                    MessageAdapter adapter = new MessageAdapter(getActivity(), R.layout.message_item, lists);
+                    msgList.setAdapter(adapter);
+                }else{
+                    lists= (List<Message>) stringToArray(httpUtil.doGet("http://10.0.2.2:7000/msg/queryByS/"+id),Message[].class);
+                    sr.setText("接收人");
+                    mySend.setText("返回");
+                    myRead.setVisibility(View.INVISIBLE);
+                    intent.putExtra("mark",1);
+                    MessageAdapter adapter = new MessageAdapter(getActivity(), R.layout.message_item, lists);
+                    msgList.setAdapter(adapter);
+                }
 
             }
         });

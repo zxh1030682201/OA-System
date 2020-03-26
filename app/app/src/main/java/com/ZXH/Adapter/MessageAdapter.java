@@ -41,7 +41,11 @@ public class MessageAdapter extends ArrayAdapter<Message> {
         msgTheme.setText(message.getMsgTheme());
 
         TextView senderName = (TextView) view.findViewById(R.id.msg_senderName);
-        senderName.setText(message.getSenderName());
+        if(message.getSenderName() != null){
+            senderName.setText(message.getSenderName());
+        }else{
+            senderName.setText(message.getReceiverName());
+        }
 
         TextView sendTime = (TextView) view.findViewById(R.id.msg_sendTime);
         sendTime.setText(message.getSendTime());

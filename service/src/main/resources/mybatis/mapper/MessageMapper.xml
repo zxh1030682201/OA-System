@@ -14,8 +14,8 @@
     </select>
 
     <select id="queryByS" resultType="Message">
-        select message.*,user.name as senderName from message,user
-        where message.sender = #{sender} and message.sender = user.userId
+        select message.*,user.name as receiverName from message,user
+        where message.sender = #{sender} and message.receiver = user.userId
     </select>
 
     <select id="queryByRR" resultType="Message">

@@ -76,7 +76,7 @@ public class MessageController {
         String msgTheme=map.get("msgTheme").toString();
         String msgContent=map.get("msgContent").toString();
         Integer readed=(int)map.get("readed");
-        Message message=new Message(0,sender,null,receiver,sendTime,msgTheme,msgContent,readed);
+        Message message=new Message(0,sender,null,receiver,null,sendTime,msgTheme,msgContent,readed);
 
         System.out.println("重新生成的msg   "+message);
         return message;

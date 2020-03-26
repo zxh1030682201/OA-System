@@ -23,6 +23,7 @@
             android:layout_marginLeft="10px"/>
 
         <TextView
+            android:id="@+id/msgSR"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:gravity="center_vertical"
