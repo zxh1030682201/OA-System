@@ -6,6 +6,12 @@
     app:startDestination="@+id/nav_message">
 
     <fragment
+        android:id="@+id/nav_members"
+        android:name="com.zxh.ui.MembersFragment"
+        android:label="@string/menu_members"
+        tools:layout="@layout/fragment_members" />
+
+    <fragment
         android:id="@+id/nav_message"
         android:name="com.zxh.ui.MessageFragment"
         android:label="@string/menu_message"
@@ -16,12 +22,6 @@
         android:name="com.zxh.ui.AttendanceFragment"
         android:label="@string/menu_attendance"
         tools:layout="@layout/fragment_attendance" />
-
-<!--    <fragment-->
-<!--        android:id="@+id/nav_meeting"-->
-<!--        android:name="com.zxh.ui.MeetingFragment"-->
-<!--        android:label="@string/menu_meeting"-->
-<!--        tools:layout="@layout/fragment_meeting" />-->
 
     <fragment
         android:id="@+id/nav_apply"

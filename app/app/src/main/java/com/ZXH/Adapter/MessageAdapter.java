@@ -28,7 +28,6 @@ public class MessageAdapter extends ArrayAdapter<Message> {
     @Override
     public View getView(int position, @Nullable View convertView, @NonNull ViewGroup parent) {
         Message message = getItem(position);
-        System.out.println(message);
         //LayoutInflater的inflate()方法接收3个参数：需要实例化布局资源的id、ViewGroup类型视图组对象、false
         //false表示只让父布局中声明的layout属性生效，但不会为这个view添加父布局
         View view;

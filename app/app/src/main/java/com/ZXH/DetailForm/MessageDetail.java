@@ -2,14 +2,33 @@ package com.zxh.DetailForm;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
+import android.view.MotionEvent;
+import android.view.View;
+import android.widget.Button;
+import android.widget.EditText;
+import android.widget.Spinner;
+import android.widget.TextView;
+import android.widget.Toast;
 
+import com.google.gson.Gson;
 import com.zxh.Entity.Message;
+import com.zxh.Entity.User;
 import com.zxh.R;
+import com.zxh.Util.HttpUtil;
 
-public class MessageDetail extends AppCompatActivity {
+import java.io.IOException;
+import java.text.SimpleDateFormat;
+import java.util.Arrays;
+import java.util.Date;
+import java.util.List;
 
+public class MessageDetail extends Activity {
+
+    private List<User> users;
+    private HttpUtil httpUtil;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -17,8 +36,51 @@ public class MessageDetail extends AppCompatActivity {
         setContentView(R.layout.message_detail);
 
         Intent intent=getIntent();
-        Message message=(Message) intent.getSerializableExtra("Message");
-        System.out.println(message);
+        // 获取上一个界面传过来的message或User
+        final Message message=(Message) intent.getSerializableExtra("Message");
+        final User user=(User) intent.getSerializableExtra("User");
 
+        final TextView senderName=(TextView)findViewById(R.id.senderName);
+        final EditText msgTheme=(EditText) findViewById(R.id.msgTheme);
+        final EditText msgContent=(EditText)findViewById(R.id.msgContent);
+        final TextView sendTime=(TextView)findViewById(R.id.sendTime);
+        final Button close=(Button)findViewById(R.id.msgDetailClose);
+        final Button finish=(Button)findViewById(R.id.msgDetailFinish);
+
+        SimpleDateFormat sdf = new SimpleDateFormat();// 格式化时间
+        sdf.applyPattern("yyyy-MM-dd HH:mm:ss");// a为am/pm的标记
+
+        if(message != null){
+            finish.setText("标记已读");
+            sendTime.setText(message.getSendTime());
+            msgTheme.setText(message.getMsgTheme());
+            msgContent.setText(message.getMsgContent());
+            senderName.setText(message.getSenderName());
+        }else{
+            Date date = new Date();// 获取当前时间
+            sendTime.setText(sdf.format(date));
+            finish.setText("发送");
+        }
+//      返回按钮
+        close.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                MessageDetail.this.finish();
+            }
+        });
+
+        //      完成按钮
+        finish.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if(finish.getText().equals("完成")){
+                    MessageDetail.this.finish();
+                }else{
+                    Message message1=new Message();
+                    message1.setMsgTheme(msgTheme.getText().toString());
+                    message1.setMsgContent(msgContent.getText().toString());
+                }
+            }
+        });
     }
 }
