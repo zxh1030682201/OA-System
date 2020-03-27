@@ -51,7 +51,7 @@
             android:textSize="20sp"
             android:textColor="#000"
             android:background="#FFF"
-            android:text="电话" />
+            android:text="操作" />
     </LinearLayout>
 
     <ListView

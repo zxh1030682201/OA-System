@@ -7,7 +7,9 @@ import androidx.fragment.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.ListView;
+import android.widget.Toast;
 
 import com.google.gson.Gson;
 import com.zxh.Adapter.MembersAdapter;
@@ -38,6 +40,14 @@ public class MembersFragment extends Fragment {
         ListView userList=getActivity().findViewById(R.id.memberList);
         MembersAdapter adapter=new MembersAdapter(getActivity(),R.layout.members_item,users);
         userList.setAdapter(adapter);
+
+
+//        View memberItem = View.inflate(getActivity(),R.layout.members_item, null);
+
+
+
+
+
     }
 
 

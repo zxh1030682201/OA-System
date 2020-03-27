@@ -4,6 +4,7 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import android.app.Activity;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.view.MotionEvent;
 import android.view.View;
@@ -41,7 +42,7 @@ public class MessageDetail extends Activity {
         Intent intent=getIntent();
         // 获取上一个界面传过来的message或User
         final Message message=(Message) intent.getSerializableExtra("Message");
-        final User user=(User) intent.getSerializableExtra("User");
+        final Integer receiver=intent.getIntExtra("receiver",0);
         final int mark=(int)intent.getIntExtra("mark",0);
         final TextView senderName=(TextView)findViewById(R.id.senderName);
         final EditText msgTheme=(EditText) findViewById(R.id.msgTheme);
@@ -49,6 +50,11 @@ public class MessageDetail extends Activity {
         final TextView sendTime=(TextView)findViewById(R.id.sendTime);
         final Button close=(Button)findViewById(R.id.msgDetailClose);
         final Button finish=(Button)findViewById(R.id.msgDetailFinish);
+
+        final SharedPreferences pref = getSharedPreferences("loginUser", 0);
+        final Integer userId=pref.getInt("userId",0);
+        final String name=pref.getString("name","");
+
 
         SimpleDateFormat sdf = new SimpleDateFormat();
         sdf.applyPattern("yyyy-MM-dd HH:mm:ss");
@@ -65,6 +71,7 @@ public class MessageDetail extends Activity {
                 finish.setText("删除消息");
             }
         }else{
+            senderName.setText(name);
             Date date = new Date();// 获取当前时间
             sendTime.setText(sdf.format(date));
             finish.setText("发送消息");
@@ -85,14 +92,27 @@ public class MessageDetail extends Activity {
                 if(finish.getText().equals("标记已读")){
                     httpUtil.doGet("http://10.0.2.2:7000/msg/msgRead/"+message.getMsgId());
                     Toast.makeText(MessageDetail.this,"标记已读成功",Toast.LENGTH_SHORT).show();
+                    MessageDetail.this.finish();
                 }
                 if(finish.getText().equals("删除消息")){
                     httpUtil.doDelete("http://10.0.2.2:7000/msg/delete/"+message.getMsgId(),"1");
                     Toast.makeText(MessageDetail.this,"删除消息成功",Toast.LENGTH_SHORT).show();
+                    MessageDetail.this.finish();
                 }else{
-                    System.out.println("发送新消息");
+                    if(msgTheme.getText().toString().isEmpty()){
+                        Toast.makeText(MessageDetail.this,"请填写主题",Toast.LENGTH_SHORT).show();
+                    }else if(msgContent.getText().toString().isEmpty()){
+                        Toast.makeText(MessageDetail.this,"请填写内容",Toast.LENGTH_SHORT).show();
+                    }else {
+                        Message newMsg=new Message(0,userId,null,receiver,null,sendTime.getText().toString(),msgTheme.getText().toString(),msgContent.getText().toString(),0);
+                        String json=new Gson().toJson(newMsg);
+                        String result=httpUtil.doPost("http://10.0.2.2:7000/msg/add",json);
+                        if(result.equals("添加消息成功")){
+                            MessageDetail.this.finish();
+                        }
+                        Toast.makeText(MessageDetail.this,result,Toast.LENGTH_SHORT).show();
+                    }
                 }
-                MessageDetail.this.finish();
             }
         });
     }

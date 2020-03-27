@@ -3,7 +3,6 @@ package com.zxh;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
-import android.os.Looper;
 import android.os.StrictMode;
 import android.view.View;
 import android.widget.Button;
@@ -16,12 +15,8 @@ import androidx.appcompat.app.AppCompatActivity;
 import com.zxh.Entity.User;
 import com.google.gson.Gson;
 import com.zxh.Util.HttpUtil;
-
-import java.io.IOException;
-
 import lombok.SneakyThrows;
-import okhttp3.Call;
-import okhttp3.Response;
+
 
 
 public class LoginActivity extends AppCompatActivity {
@@ -74,6 +69,7 @@ public class LoginActivity extends AppCompatActivity {
                     Toast.makeText(LoginActivity.this,"登陆成功",Toast.LENGTH_SHORT).show();
                     User user=gson.fromJson(result,User.class);
 
+                    //登陆成功后存入登陆者信息
                     SharedPreferences.Editor editor = getSharedPreferences("loginUser",MODE_PRIVATE).edit();
                     editor.putBoolean("rememberPwd",remember.isChecked());
                     editor.putInt("userId",user.getUserId());
@@ -84,6 +80,7 @@ public class LoginActivity extends AppCompatActivity {
                     editor.putInt("deptId",user.getDeptId());
                     editor.putString("deptName",user.getDeptName());
                     editor.apply();
+
                     Intent intent = new Intent(LoginActivity.this,MainActivity.class);
                     startActivity(intent);
                 }
