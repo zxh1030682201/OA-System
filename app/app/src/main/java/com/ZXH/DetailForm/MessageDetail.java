@@ -42,7 +42,7 @@ public class MessageDetail extends Activity {
         // 获取上一个界面传过来的message或User
         final Message message=(Message) intent.getSerializableExtra("Message");
         final User user=(User) intent.getSerializableExtra("User");
-        final int mark=(int)intent.getSerializableExtra("mark");
+        final int mark=(int)intent.getIntExtra("mark",0);
         final TextView senderName=(TextView)findViewById(R.id.senderName);
         final EditText msgTheme=(EditText) findViewById(R.id.msgTheme);
         final EditText msgContent=(EditText)findViewById(R.id.msgContent);
@@ -50,8 +50,8 @@ public class MessageDetail extends Activity {
         final Button close=(Button)findViewById(R.id.msgDetailClose);
         final Button finish=(Button)findViewById(R.id.msgDetailFinish);
 
-        SimpleDateFormat sdf = new SimpleDateFormat();// 格式化时间
-        sdf.applyPattern("yyyy-MM-dd HH:mm:ss");// a为am/pm的标记
+        SimpleDateFormat sdf = new SimpleDateFormat();
+        sdf.applyPattern("yyyy-MM-dd HH:mm:ss");
 
         if(message != null){
             sendTime.setText(message.getSendTime());

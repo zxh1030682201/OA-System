@@ -127,11 +127,6 @@ public class AttendanceFragment extends Fragment {
         });
     }
 
-    @Override
-    public void onResume() {
-        // TODO Auto-generated method stub
-        super.onResume();
-    }
 
     //  json转化方法
     public static <T> List<T> stringToArray(String s, Class<T[]> clazz) {

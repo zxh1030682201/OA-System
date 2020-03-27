@@ -115,6 +115,7 @@ public class MessageFragment extends Fragment {
                     sr.setText("发送人");
                     mySend.setText("我发送的");
                     myRead.setVisibility(View.VISIBLE);
+                    intent.putExtra("mark",0);
                     MessageAdapter adapter = new MessageAdapter(getActivity(), R.layout.message_item, lists);
                     msgList.setAdapter(adapter);
                 }else{

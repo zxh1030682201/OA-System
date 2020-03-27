@@ -1,5 +1,7 @@
 package com.zxh.Entity;
 
+import java.io.Serializable;
+
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -7,7 +9,7 @@ import lombok.NoArgsConstructor;
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-public class Apply {
+public class Apply implements Serializable {
     private int applyId;
     private int applyUser;
     private String applyUserName;
